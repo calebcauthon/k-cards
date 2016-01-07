@@ -2,8 +2,7 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function($http, $scope, $state) {
   $scope.view = function(id) {
-    console.log('go?', id);
-    $state.go('tab.recipe', { id: id });
+    $state.go('recipe.view', { id: id });
   };
 
   var recipe_gist_ids = [

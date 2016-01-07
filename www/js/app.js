@@ -34,38 +34,69 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'templates/home-tabs.html'
   })
 
-  .state('tab.recipe', {
+  .state('recipe', {
     url: '/recipe/:id',
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/recipe.html',
-        controller: function($scope, $http, $stateParams) {
-          $scope.name = $stateParams.id;
+    abstract: true,
+    templateUrl: 'templates/recipe-tabs.html',
+    controller: function($scope, $stateParams) {
+      $scope.id = $stateParams.id;
+    },
+    resolve: {
+      recipe: function($http, $stateParams) {
+        var url = 'templates/recipes/' + $stateParams.id + '.txt';
+        return $http.get(url).then(function(response) {
+          var steps = _.map(response.data.split("\n"), function(line) {
+            try {
+              var verb = line.match(/^[^a-z0-9]+[^a-z0-9\ ]/)[0];
 
-          var url = 'templates/recipes/' + $stateParams.id + '.txt';
-          $http.get(url).then(function(response) {
-            $scope.steps = _.map(response.data.split("\n"), function(line) {
-              try {
-                var verb = line.match(/^[^a-z0-9]+[^a-z0-9\ ]/)[0];
-
-                return {
-                  verb: verb,
-                  other: line.replace(verb, ''),
-                  text: line
-                };
-              } catch (err) {
-                return {
-                  verb: '',
-                  other: '',
-                  text: ''
-                };
-              }
-            });
-            $scope.recipe = response.data;
+              return {
+                verb: verb,
+                other: line.replace(verb, ''),
+                text: line
+              };
+            } catch (err) {
+              return {
+                verb: '',
+                other: '',
+                text: ''
+              };
+            }
           });
+
+          return {
+            full_text: response.data,
+            steps: steps,
+            name: $stateParams.id
+          };
+        });
+        
+      }
+    }
+  })
+
+
+  .state('recipe.view', {
+    url: '/steps',
+    views: {
+      'tab-recipe': {
+        templateUrl: 'templates/tab-recipe.html',
+        controller: function($scope, $http, recipe) {
+          $scope.name = recipe.name;
+          $scope.steps = recipe.steps;
+        }
+      }
+    }
+  })
+
+  .state('recipe.ingredients', {
+    url: '/ingredients',
+    views: {
+      'tab-ingredients': {
+        templateUrl: 'templates/tab-ingredients.html',
+        controller: function(recipe) {
         }
       }
     }
