@@ -1,0 +1,17 @@
+<ion-view view-title='{{name}}'>
+  <ion-content>
+    <ion-list>
+      <div 
+        class='small'
+        ng-repeat-start='step in steps track by $index'>
+          <ion-item ng-if='step.text.length == 0'></ion-item>
+          <ion-checkbox 
+            ng-if='step.text.length'
+            ng-model="filter.blue">
+              <strong>{{step.verb}}</strong> {{step.other}}
+              </ion-checkbox>
+        </div>
+      <div ng-repeat-end></div>
+    </ion-list>
+  </ion-content>
+</ion-view>

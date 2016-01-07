@@ -1,0 +1,12 @@
+<ion-view view-title='Dashboard'>
+  <ion-content>
+    <ul class='list'>
+      <li 
+        ng-repeat='data in recipes'
+        ng-click='view(data.id)'
+        class='item'>
+          {{data.recipe_name}}
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>
