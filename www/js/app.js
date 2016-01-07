@@ -83,18 +83,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     views: {
       'tab-recipe': {
         templateUrl: 'templates/tab-recipe.html',
-        controller: function($state, $scope, $http, recipe, $ionicNavBarDelegate) {
-          
-          $scope.$on('$ionicView.enter', function() {
-            $ionicNavBarDelegate.forceShowBackButton(function() {
-              $state.go('tab.dash');
-              $ionicNavBarDelegate.unForceShowBackButton();
-            });
-
-            $scope.name = recipe.name;
-            $scope.steps = recipe.steps;
-          });
-        }
+        controller: 'RecipeViewCtrl'
       }
     }
   })
