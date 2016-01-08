@@ -1,5 +1,14 @@
 <ion-view view-title='Ingredients'>
   <ion-content>
-    Ingredients:
+    <ion-list>
+      <div 
+        class='small'
+        ng-repeat-start='ingredient in recipe.ingredients track by $index'>
+          <ion-item>
+            {{ingredient}}
+          </ion-item>
+        </div>
+      <div ng-repeat-end></div>
+    </ion-list>
   </ion-content>
 </ion-view>

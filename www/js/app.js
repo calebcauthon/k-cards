@@ -46,15 +46,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     },
     resolve: {
       recipe: function($http, $stateParams) {
-        var url = 'templates/recipes/' + $stateParams.id + '.txt';
+        var url = 'templates/recipes/' + $stateParams.id + '.json';
         return $http.get(url).then(function(response) {
-          var steps = _.map(response.data.split("\n"), function(line) {
+          var recipe = response.data;
+          var name = recipe.name;
+          var ingredients = _.chain(recipe.steps).map(function(step) {
+            return _.map(step.ingredients, function(data) {
+              return data.text.replace('{{value}}', data.value);
+            });
+          }).flatten().value();
+
+          var steps = _.map(recipe.steps, function(step) {
             try {
-              var verb = line.match(/^[^a-z0-9]+[^a-z0-9\ ]/)[0];
+              var verb = step.verb;
+              var line = step.text;
 
               return {
                 verb: verb,
-                other: line.replace(verb, ''),
+                other: line.replace('{{verb}}', ''),
                 text: line
               };
             } catch (err) {
@@ -67,9 +76,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           });
 
           return {
-            full_text: response.data,
             steps: steps,
-            name: $stateParams.id
+            ingredients: ingredients,
+            name: name
           };
         });
         
@@ -93,7 +102,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     views: {
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
-        controller: function(recipe) {
+        controller: function($scope, recipe) {
+          $scope.recipe = recipe;
         }
       }
     }

@@ -1,0 +1,53 @@
+{ "name": "Bean and Cheese Tacos",
+  "steps": [
+    {
+      "text": "{{verb}} the pan (olive oil)",
+      "verb": "HEAT",
+      "ingredients": []
+    },
+    { 
+      "text": "{{verb}} 2 cans chickpeas (drain, wash, add to pan)",
+      "verb": "PREP",
+      "ingredients": [
+        { 
+          "text": "{{value}} cans chickpeas",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "text": "{{verb}} cheese (shred)",
+      "verb": "PREP",
+      "ingredients": [
+        {
+          "text": "cheese"
+        }
+      ]
+    },
+    {
+      "text": "PREP 1 avocado (sliced)",
+      "ingredients": [
+        {
+          "text": "{{value}} avocado",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "text": "PREP shredded cabbage (wash, chop)",
+      "ingredients": [
+        {
+          "text": "cabbage"
+        }
+      ]
+    },
+    {
+      "text": "PREP green onions (wash, chop)",
+      "ingredients": [
+        {
+          "text": "green onions"
+        }
+      ]
+    }
+  ]
+}

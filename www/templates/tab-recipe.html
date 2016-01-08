@@ -1,9 +1,9 @@
-<ion-view view-title='{{name}}'>
+<ion-view view-title='{{recipe.name}}'>
   <ion-content>
     <ion-list>
       <div 
         class='small'
-        ng-repeat-start='step in steps track by $index'>
+        ng-repeat-start='step in recipe.steps track by $index'>
           <ion-item ng-if='step.text.length == 0'></ion-item>
           <ion-checkbox 
             ng-if='step.text.length'

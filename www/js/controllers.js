@@ -6,16 +6,16 @@ angular.module('starter.controllers', [])
   };
 
   var recipe_gist_ids = [
-    'Shakshuka with Spinach',
+    //'Shakshuka with Spinach',
     'Bean and Cheese Tacos',
-    'Crispy Eggplant Wraps with Yogurt Sauce',
-    'Kale, Barley and Chickpea Salad',
-    'Cauliflower Rice Lettuce Cups'
+    //'Crispy Eggplant Wraps with Yogurt Sauce',
+    //'Kale, Barley and Chickpea Salad',
+    //'Cauliflower Rice Lettuce Cups'
   ];
 
   $scope.recipes = [];
   recipe_gist_ids.forEach(function(id) {
-    $http.get('templates/recipes/' + id + '.txt').then(function(response) {
+    $http.get('templates/recipes/' + id + '.json').then(function(response) {
       var content;
         
       _.each(response.data, function(file_content) {
@@ -57,7 +57,6 @@ angular.module('starter.controllers', [])
       $ionicNavBarDelegate.unForceShowBackButton();
     });
 
-    $scope.name = recipe.name;
-    $scope.steps = recipe.steps;
+    $scope.recipe = recipe;
   });
 });
