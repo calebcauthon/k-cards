@@ -1,3 +1,5 @@
 /* Empty. Add your own CSS if you like */
 .small .item { padding: 8px; }
 .small .item-checkbox { padding-left: 60px; }
+
+.steps .item .item-content { white-space: normal; }
