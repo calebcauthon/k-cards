@@ -1,4 +1,13 @@
 <ion-view view-title='{{recipe.name}}'>
+  <ion-nav-buttons side="primary">
+    <button class="button back-button hide buttons  button-clear header-item" ng-click="goBack()">
+      <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text" style="display: inline-block;">
+        <span class="default-title">Recipes</span>
+      </span>
+    </button>
+  </ion-nav-buttons>
+  
   <ion-content>
     <ion-list class="steps">
       <div 

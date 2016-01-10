@@ -46,13 +46,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     },
     resolve: {
       recipe: function($http, $stateParams) {
-        var url = 'templates/recipes/' + $stateParams.id + '.json';
-        return $http.get(url).then(function(response) {
+        return $http.get('/api/recipe/' + $stateParams.id).then(function(response) {
           var recipe = response.data;
+          console.log(recipe);
           var name = recipe.name;
+          
           var ingredients = _.chain(recipe.steps).map(function(step) {
             return _.map(step.ingredients, function(data) {
-              return data.text.replace('{{value}}', data.value);
+              if(data.text && data.text.replace) 
+                return data.text.replace('{{value}}', data.value);
+              else
+                return '';
             });
           }).flatten().value();
 
@@ -102,7 +106,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     views: {
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
-        controller: function($scope, recipe) {
+        controller: function($state, $scope, recipe, $ionicNavBarDelegate) {
           $scope.recipe = recipe;
         }
       }

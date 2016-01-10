@@ -3,3 +3,5 @@
 .small .item-checkbox { padding-left: 60px; }
 
 .steps .item .item-content { white-space: normal; }
+
+.bar-stable .button.button-clear { display: inline-block; }

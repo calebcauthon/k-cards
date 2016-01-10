@@ -51529,10 +51529,6 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
      * @description Navigates the app to the back view, if a back view exists.
      */
     goBack: function(backCount) {
-      if(this.showBack) {
-        this.goBackFn();
-        return;
-      }
       if (isDefined(backCount) && backCount !== -1) {
         if (backCount > -1) return;
 
@@ -53137,8 +53133,6 @@ IonicModule
    * @param {boolean} show Whether to show the bar.
    * @returns {boolean} Whether the bar is shown.
    */
-  'forceShowBackButton',
-  'unForceShowBackButton',
   'showBar',
   /**
    * @ngdoc method
@@ -55539,6 +55533,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     return isBackEnabled;
   };
 
+
   self.showBack = function(shouldShow, disableReset) {
     // different from enableBack() because this will always have the back
     // visually hidden if false, even if the history says it should show
@@ -55549,6 +55544,7 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     return isBackShown;
   };
 
+
   self.showNavBack = function(shouldShow) {
     // different from showBack() because this is for the entire nav bar's
     // setting for all of it's child headers. For internal use.
@@ -55556,15 +55552,16 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     self.updateBackButton();
   };
 
+
   self.updateBackButton = function() {
     var ele;
-    if ($ionicHistory.showBack || ((isBackShown && isNavBackShown && isBackEnabled) !== isBackElementShown)) {
-      isBackElementShown = $ionicHistory.showBack || (isBackShown && isNavBackShown && isBackEnabled);
+    if ((isBackShown && isNavBackShown && isBackEnabled) !== isBackElementShown) {
+      isBackElementShown = isBackShown && isNavBackShown && isBackEnabled;
       ele = getEle(BACK_BUTTON);
       ele && ele.classList[ isBackElementShown ? 'remove' : 'add' ](HIDE);
     }
 
-    if ($ionicHistory.showBack || isBackEnabled) {
+    if (isBackEnabled) {
       ele = ele || getEle(BACK_BUTTON);
       if (ele) {
         if (self.backButtonIcon !== $ionicConfig.backButton.icon()) {
@@ -55585,8 +55582,6 @@ function($scope, $element, $attrs, $q, $ionicConfig, $ionicHistory) {
     }
   };
 
-  $ionicHistory.showBack = false;
-  $ionicHistory.updateBackButton = self.updateBackButton.bind(self);
 
   self.titleTextWidth = function() {
     if (!titleTextWidth) {
@@ -56501,18 +56496,6 @@ function($scope, $element, $attrs, $compile, $timeout, $ionicNavBarDelegate, $io
       $scope.$isBackButtonShown = !!shouldShow;
     }
     return $scope.$isBackButtonShown;
-  };
-
-  self.forceShowBackButton = function(fn) {
-    $ionicHistory.showBack = true;
-    $ionicHistory.updateBackButton();
-    $ionicHistory.goBackFn = fn;
-  };
-
-  self.unForceShowBackButton = function(fn) {
-    $ionicHistory.showBack = false;
-    $ionicHistory.updateBackButton();
-    $ionicHistory.goBackFn = function() {};
   };
 
 

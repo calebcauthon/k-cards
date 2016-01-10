@@ -1,36 +1,21 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($http, $scope, $state) {
+.controller('DashCtrl', function($ionicNavBarDelegate, $http, $scope, $state) {
   $scope.view = function(id) {
     $state.go('recipe.view', { id: id });
   };
 
-  var recipe_gist_ids = [
-    //'Shakshuka with Spinach',
-    'Bean and Cheese Tacos',
-    //'Crispy Eggplant Wraps with Yogurt Sauce',
-    //'Kale, Barley and Chickpea Salad',
-    //'Cauliflower Rice Lettuce Cups'
-  ];
-
-  $scope.recipes = [];
-  recipe_gist_ids.forEach(function(id) {
-    $http.get('templates/recipes/' + id + '.json').then(function(response) {
-      var content;
-        
-      _.each(response.data, function(file_content) {
-        content = file_content;
-      });
-
+  $http.post('/api/recipes').then(function(response) {
+    console.log(response.data);
+    _.each(response.data, function(record) {
       $scope.recipes.push({
-        id: id,
-        recipe_name: id,
-        recipe_text: content
+        id: record._id,
+        recipe_name: record.name
       });
-
     });
   });
 
+  $scope.recipes = [];
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
@@ -51,12 +36,6 @@ angular.module('starter.controllers', [])
 })
 
 .controller('RecipeViewCtrl', function($state, $scope, $http, recipe, $ionicNavBarDelegate) {         
-  $scope.$on('$ionicView.enter', function() {
-    $ionicNavBarDelegate.forceShowBackButton(function() {
-      $state.go('tab.dash');
-      $ionicNavBarDelegate.unForceShowBackButton();
-    });
-
-    $scope.recipe = recipe;
-  });
+  $scope.goBack = function() { $state.go('tab.dash'); };
+  $scope.recipe = recipe;
 });
