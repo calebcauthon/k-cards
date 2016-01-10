@@ -3,6 +3,6 @@
     "api_endpoint": "http://localhost:3000"
   },
   "heroku": {
-    "api_endpoint": "http://k-cards-api.herokuapp.com"
+    "api_endpoint": "https://k-cards-api.herokuapp.com"
   }
 }
