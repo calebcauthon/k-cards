@@ -1,11 +1,11 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['recipeApp.config'])
 
-.controller('DashCtrl', function($ionicNavBarDelegate, $http, $scope, $state) {
+.controller('DashCtrl', function(api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
   $scope.view = function(id) {
     $state.go('recipe.view', { id: id });
   };
 
-  $http.post('/api/recipes').then(function(response) {
+  $http.post(api_endpoint + '/recipes').then(function(response) {
     console.log(response.data);
     _.each(response.data, function(record) {
       $scope.recipes.push({
@@ -35,7 +35,7 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('RecipeViewCtrl', function($state, $scope, $http, recipe, $ionicNavBarDelegate) {         
+.controller('RecipeViewCtrl', function($state, $scope, recipe, $ionicNavBarDelegate) {         
   $scope.goBack = function() { $state.go('tab.dash'); };
   $scope.recipe = recipe;
 });

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -45,8 +45,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       $scope.id = $stateParams.id;
     },
     resolve: {
-      recipe: function($http, $stateParams) {
-        return $http.get('/api/recipe/' + $stateParams.id).then(function(response) {
+      recipe: function($http, $stateParams, api_endpoint) {
+        return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
           var recipe = response.data;
           console.log(recipe);
           var name = recipe.name;
