@@ -6,7 +6,6 @@ angular.module('starter.controllers', ['recipeApp.config'])
   };
 
   $http.post(api_endpoint + '/recipes').then(function(response) {
-    console.log(response.data);
     _.each(response.data, function(record) {
       $scope.recipes.push({
         id: record._id,
@@ -38,4 +37,11 @@ angular.module('starter.controllers', ['recipeApp.config'])
 .controller('RecipeViewCtrl', function($state, $scope, recipe, $ionicNavBarDelegate) {         
   $scope.goBack = function() { $state.go('tab.dash'); };
   $scope.recipe = recipe;
+
+  $scope.interpolatedStep = function(step) {
+    var text = step.text;
+    text = text.replace('{{verb}}', '');
+    text = text.replace('{{amount}}', step.amounts[0] * recipe.serving_size);
+    return text;
+  };
 });

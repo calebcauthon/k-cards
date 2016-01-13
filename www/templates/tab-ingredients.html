@@ -1,11 +1,26 @@
 <ion-view view-title='Ingredients'>
   <ion-content>
     <ion-list>
-      <div 
+      <div class="row">
+        <div class="col col-50">
+          <span>Serving Size</span>
+        </div>
+        <div class=" col col-50">
+          <ion-icon
+            ng-click="recipe.serving_size = recipe.serving_size == 1 ? 1 : recipe.serving_size - 1"
+            class="ion-minus-round"></ion-icon>
+          <span>{{recipe.serving_size}}</span>
+          <ion-icon
+            ng-click="recipe.serving_size = recipe.serving_size + 1"
+            class="ion-plus-round"></ion-icon>
+        </div>
+      </div>
+
+      <div
         class='small'
-        ng-repeat-start='ingredient in recipe.ingredients track by $index'>
+        ng-repeat-start='ingredient in ingredients track by $index'>
           <ion-item>
-            {{ingredient}}
+            {{ingredient.substance}} {{amountFor(ingredient, recipe.serving_size)}}
           </ion-item>
         </div>
       <div ng-repeat-end></div>

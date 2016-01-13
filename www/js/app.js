@@ -48,17 +48,8 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       recipe: function($http, $stateParams, api_endpoint) {
         return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
           var recipe = response.data;
-          console.log(recipe);
-          var name = recipe.name;
           
-          var ingredients = _.chain(recipe.steps).map(function(step) {
-            return _.map(step.ingredients, function(data) {
-              if(data.text && data.text.replace) 
-                return data.text.replace('{{value}}', data.value);
-              else
-                return '';
-            });
-          }).flatten().value();
+          var name = recipe.name;
 
           var steps = _.map(recipe.steps, function(step) {
             try {
@@ -68,20 +59,24 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
               return {
                 verb: verb,
                 other: line.replace('{{verb}}', ''),
-                text: line
+                text: step.text,
+                ingredients: step.ingredients,
+                amounts: step.amounts
               };
             } catch (err) {
               return {
                 verb: '',
                 other: '',
-                text: ''
+                text: '',
+                ingredients: [],
+                amounts: []
               };
             }
           });
 
           return {
+            serving_size: 1,
             steps: steps,
-            ingredients: ingredients,
             name: name
           };
         });
@@ -106,8 +101,16 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     views: {
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
-        controller: function($state, $scope, recipe, $ionicNavBarDelegate) {
+        controller: function($scope, recipe) {
           $scope.recipe = recipe;
+
+          $scope.ingredients = _.chain(recipe.steps).pluck('ingredients').flatten().uniq().value();
+          $scope.amountFor = function(ingredient, serving_size) {
+            if(!ingredient.amount_text)
+              return '';
+
+            return ingredient.amount_text.replace('{{value}}', ingredient.amount_numeric * serving_size);
+          };
         }
       }
     }

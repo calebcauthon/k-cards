@@ -17,7 +17,7 @@
           <ion-checkbox 
             ng-if='step.text.length'
             ng-model="filter.blue">
-              <strong>{{step.verb}}</strong> {{step.other}}
+              <strong>{{step.verb}}</strong> {{interpolatedStep(step)}}
               </ion-checkbox>
         </div>
       <div ng-repeat-end></div>
