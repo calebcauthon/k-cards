@@ -131,10 +131,25 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
           var step = recipe.steps[$stateParams.step];
           var ingredient = step.ingredients.join(' ');
 
+          $scope.serving_size = recipe.serving_size;
           $scope.step = step;
           $scope.ingredient = ingredient;
           $scope.amount = step.amounts[0];
           $scope.measurement = step.measurements.join(' ');
+
+          $scope.new_amount = Number($scope.amount);
+          $scope.new_measurement =  $scope.measurement
+
+          $scope.updateIngredientAmount = function(new_amount, new_measurement) {
+            var old_amount_and_measurement = [$scope.amount].concat(step.measurements).join(' ');
+            var new_amount_and_measurement = new_amount + ' ' + $scope.new_measurement;
+
+            step.text = step.text.replace(old_amount_and_measurement, new_amount_and_measurement);
+            step.amounts[0] = new_amount;
+            $scope.amount = step.amounts[0];
+
+            $scope.saveRecipe(recipe);
+          };
 
           $scope.updateIngredient = function(new_ingredient) {
             step.text = step.text.replace(ingredient, new_ingredient);

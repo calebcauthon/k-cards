@@ -33,10 +33,38 @@
     <ion-item>
       <div class="row">
         <div class="col">
-          {{amount}} {{measurement}} makes {{recipe.serving_size}} servings
+          <span ng-hide="editing_amount">
+            adding {{amount}} {{measurement}} makes {{serving_size}} servings
+          </span>
+
+          <div
+            ng-show="editing_amount"
+            class="row">
+            <div class="col">
+              <ion-icon
+                ng-click="new_amount = new_amount == 1 ? 1 : new_amount - 1"
+                class="ion-minus-round"></ion-icon>
+              <span>{{new_amount}}</span>
+              <ion-icon
+                ng-click="new_amount = new_amount + 1"
+                class="ion-plus-round"></ion-icon>
+            </div>
+            <div class="col">
+              <select ng-options="item as item for item in ['cup', 'tsp', 'tbsp']" ng-model="measurement">
+              </select>
+            </div>
+          </div>
+
         </div>
         <div class="col col-25">
-          <button class="button-right button">Change</button>
+          <button
+            ng-click="editing_amount=true"
+            ng-show="!editing_amount"
+            class="button-right button">Change</button>
+          <button
+            ng-click="editing_amount=false; updateIngredientAmount(new_amount, new_measurement)"
+            ng-hide="!editing_amount"
+            class="button-right button">Ok</button>
         </div>
       </div>
     </ion-item>
