@@ -1,0 +1,14 @@
+{
+  "name": "k-cards-js",
+  "homepage": "https://github.com/calebcauthon/k-cards-js",
+  "_release": "a1a88a5cb4",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a1a88a5cb45950d30a95f97e6bad65663ae7659c"
+  },
+  "_source": "git@github.com:calebcauthon/k-cards-js.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:calebcauthon/k-cards-js.git",
+  "_direct": true
+}

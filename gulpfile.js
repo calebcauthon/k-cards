@@ -53,3 +53,10 @@ gulp.task('install', ['git-check'], function() {
       gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
+
+gulp.task('js', function() {
+  return gulp.src("www/lib/k-cards-js/services.js")
+    .pipe(gulp.dest("www/js/k-cards-services"))
+});
+
+
