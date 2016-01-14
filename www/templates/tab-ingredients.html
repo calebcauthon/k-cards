@@ -3,16 +3,29 @@
     <ion-list>
       <div class="row">
         <div class="col col-50">
-          <span>Serving Size</span>
+          <div class="row">
+            <div class="col">
+              <span>Serving Size</span>
+            </div>
+          </div>
         </div>
-        <div class=" col col-50">
-          <ion-icon
-            ng-click="recipe.serving_size = recipe.serving_size == 1 ? 1 : recipe.serving_size - 1"
-            class="ion-minus-round"></ion-icon>
-          <span>{{recipe.serving_size}}</span>
-          <ion-icon
-            ng-click="recipe.serving_size = recipe.serving_size + 1"
-            class="ion-plus-round"></ion-icon>
+        <div class="col col-50">
+          <div class="row">
+            <div class="col">
+              <ion-icon
+                ng-click="setServingSize(serving_size == 1 ? 1 : serving_size - 1)"
+                class="ion-minus-round"></ion-icon>
+              <span>{{serving_size}}</span>
+              <ion-icon
+                ng-click="setServingSize(serving_size + 1)"
+                class="ion-plus-round"></ion-icon>
+            </div>
+            <div class="col col-30">
+              <button
+                ng-click="setServingSize(recipe.serving_size)"
+                class="button button-small">Reset</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -20,7 +33,15 @@
         class='small'
         ng-repeat-start='ingredient in ingredients track by $index'>
           <ion-item>
-            {{ingredient}} {{amountFor(ingredient, recipe.serving_size)}}
+            <div class="row">
+              <div class="col col-50">{{ingredient.text}}</div>
+              <div class="col">
+                <div class="row">
+                  <div class="col">{{ingredient.amount * recipe.serving_ratio}}</div>
+                  <div class="col col-70">{{ingredient.measurement }}</div>
+                </div>
+              </div>
+            </div>
           </ion-item>
         </div>
       <div ng-repeat-end></div>

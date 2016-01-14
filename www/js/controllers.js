@@ -34,7 +34,7 @@ angular.module('starter.controllers', ['recipeApp.config'])
   };
 })
 
-.controller('RecipeViewCtrl', function($state, $scope, recipe, $ionicNavBarDelegate) {         
+.controller('RecipeViewCtrl', function($state, $scope, recipe, $ionicNavBarDelegate) {
   $scope.goBack = function() { $state.go('tab.dash'); };
   $scope.recipe = recipe;
 
@@ -47,7 +47,7 @@ angular.module('starter.controllers', ['recipeApp.config'])
     // replace AMOUNT
     if(step.amounts.length) {
       var amount_in_original_text = step.amounts.join(' ');
-      var new_amount = Number(amount_in_original_text) * recipe.serving_size;
+      var new_amount = Number(amount_in_original_text) * (recipe.serving_ratio || recipe.serving_size);
       text = text.replace(amount_in_original_text, new_amount);
     }
 

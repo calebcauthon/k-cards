@@ -47,40 +47,14 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     resolve: {
       recipe: function($http, $stateParams, api_endpoint) {
         return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
-          var recipe = response.data;
-          
-          var name = recipe.name;
-
-          var steps = _.map(recipe.steps, function(step) {
-            try {
-              var verb = step.verb;
-              var line = step.text;
-
-              return {
-                verb: verb,
-                other: line.replace('{{verb}}', ''),
-                text: step.text,
-                ingredients: step.ingredients,
-                amounts: step.amounts
-              };
-            } catch (err) {
-              return {
-                verb: '',
-                other: '',
-                text: '',
-                ingredients: [],
-                amounts: []
-              };
-            }
-          });
 
           return {
-            serving_size: 1,
-            steps: steps,
-            name: name
+            serving_size: response.data.serving_size,
+            steps: response.data.steps,
+            name: response.data.name
           };
         });
-        
+
       }
     }
   })
@@ -102,15 +76,29 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
         controller: function($scope, recipe) {
+          $scope.setServingSize = function(size) {
+            $scope.serving_size = Number(size);
+            recipe.serving_ratio = $scope.serving_size / recipe.serving_size;
+          };
+
           $scope.recipe = recipe;
+          $scope.setServingSize(recipe.serving_size);
 
-          $scope.ingredients = _.chain(recipe.steps).pluck('ingredients')
-            .map(function(text) {
-              return text.join(' ');
+          $scope.ingredients = _.chain(recipe.steps)
+            .map(function(step) {
+              var ingredient_words = step.ingredients;
+
+              return {
+                text: ingredient_words.join(' '),
+                amount: Number(step.amounts[0]),
+                measurement: step.measurements[0]
+              };
             })
-            .select('length').uniq().value();
+            .select(function(data) {
+              return data.text.length;
+            }).uniq().value();
 
-          $scope.amountFor = function(ingredient, serving_size) {
+          $scope.amountFor = function(ingredient, amount, measurement, serving_size) {
             if(!ingredient.amount_text)
               return '';
 
