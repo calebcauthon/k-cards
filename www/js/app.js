@@ -104,7 +104,12 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
         controller: function($scope, recipe) {
           $scope.recipe = recipe;
 
-          $scope.ingredients = _.chain(recipe.steps).pluck('ingredients').flatten().uniq().value();
+          $scope.ingredients = _.chain(recipe.steps).pluck('ingredients')
+            .map(function(text) {
+              return text.join(' ');
+            })
+            .select('length').uniq().value();
+
           $scope.amountFor = function(ingredient, serving_size) {
             if(!ingredient.amount_text)
               return '';

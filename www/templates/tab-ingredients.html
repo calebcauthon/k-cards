@@ -20,7 +20,7 @@
         class='small'
         ng-repeat-start='ingredient in ingredients track by $index'>
           <ion-item>
-            {{ingredient.substance}} {{amountFor(ingredient, recipe.serving_size)}}
+            {{ingredient}} {{amountFor(ingredient, recipe.serving_size)}}
           </ion-item>
         </div>
       <div ng-repeat-end></div>

@@ -40,8 +40,17 @@ angular.module('starter.controllers', ['recipeApp.config'])
 
   $scope.interpolatedStep = function(step) {
     var text = step.text;
-    text = text.replace('{{verb}}', '');
-    text = text.replace('{{amount}}', step.amounts[0] * recipe.serving_size);
+
+    // remove VERB
+    text = text.replace(step.verb, '');
+
+    // replace AMOUNT
+    if(step.amounts.length) {
+      var amount_in_original_text = step.amounts.join(' ');
+      var new_amount = Number(amount_in_original_text) * recipe.serving_size;
+      text = text.replace(amount_in_original_text, new_amount);
+    }
+
     return text;
   };
 });
