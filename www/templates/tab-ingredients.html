@@ -29,9 +29,11 @@
         </div>
       </div>
 
-      <div
-        class='small'
-        ng-repeat-start='ingredient in ingredients track by $index'>
+      <a
+        style="text-decoration: none;"
+        ng-repeat='ingredient in ingredients track by $index'
+        href="#/recipe/{{id}}/ingredients/{{stepIndexOf(ingredient.text)}}/some-ingredient">
+        <div class='small'>
           <ion-item>
             <div class="row">
               <div class="col col-50">{{ingredient.text}}</div>
@@ -44,7 +46,7 @@
             </div>
           </ion-item>
         </div>
-      <div ng-repeat-end></div>
+      </a>
     </ion-list>
   </ion-content>
 </ion-view>

@@ -76,6 +76,15 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
         controller: function($scope, recipe) {
+
+          $scope.stepIndexOf = function(ingredient) {
+            var step = _.find(recipe.steps, function(step) {
+              return step.ingredients.join(' ') == ingredient;
+            });
+
+            return _.indexOf(recipe.steps, step);
+          };
+
           $scope.setServingSize = function(size) {
             $scope.serving_size = Number(size);
             recipe.serving_ratio = $scope.serving_size / recipe.serving_size;
@@ -84,19 +93,21 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
           $scope.recipe = recipe;
           $scope.setServingSize(recipe.serving_size);
 
-          $scope.ingredients = _.chain(recipe.steps)
-            .map(function(step) {
-              var ingredient_words = step.ingredients;
+          $scope.$on('$ionicView.beforeEnter', function() {
+            $scope.ingredients = _.chain(recipe.steps)
+              .map(function(step) {
+                var ingredient_words = step.ingredients;
 
-              return {
-                text: ingredient_words.join(' '),
-                amount: Number(step.amounts[0]),
-                measurement: step.measurements[0]
-              };
-            })
-            .select(function(data) {
-              return data.text.length;
-            }).uniq().value();
+                return {
+                  text: ingredient_words.join(' '),
+                  amount: Number(step.amounts[0]),
+                  measurement: step.measurements[0]
+                };
+              })
+              .select(function(data) {
+                return data.text.length;
+              }).uniq().value();
+          });
 
           $scope.amountFor = function(ingredient, amount, measurement, serving_size) {
             if(!ingredient.amount_text)
@@ -104,6 +115,46 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
 
             return ingredient.amount_text.replace('{{value}}', ingredient.amount_numeric * serving_size);
           };
+        }
+      }
+    }
+  })
+
+  .state('recipe.ingredient-detail', {
+    url:'/ingredients/:step/:name',
+    views: {
+      'tab-ingredients': {
+        templateUrl: 'templates/tab-ingredient-detail.html',
+        controller: function($state, $http, recipe, $scope, $stateParams, api_endpoint) {
+          $scope.goBack = function() { $state.go('recipe.ingredients'); };
+
+          var step = recipe.steps[$stateParams.step];
+          var ingredient = step.ingredients.join(' ');
+
+          $scope.step = step;
+          $scope.ingredient = ingredient;
+          $scope.amount = step.amounts[0];
+          $scope.measurement = step.measurements.join(' ');
+
+          $scope.updateIngredient = function(new_ingredient) {
+            step.text = step.text.replace(ingredient, new_ingredient);
+            step.ingredients = new_ingredient.split(' ');
+            ingredient = step.ingredients.join(' ');
+            $scope.ingredient = step.ingredients.join(' ');
+
+            $scope.saveRecipe(recipe);
+          };
+
+          $scope.saveRecipe = function(recipe) {
+            $http.post(api_endpoint + '/update-recipe/', {
+              id: $scope.id,
+              recipe: recipe
+            }).then(function(response) {
+              $scope.creating = false;
+            }, function(err) {
+              $scope.creating = false;
+            });
+          }
         }
       }
     }

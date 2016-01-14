@@ -1,0 +1,44 @@
+<ion-view view-title='{{ingredient}} details'>
+  <ion-nav-buttons side="primary">
+    <button class="button back-button hide buttons  button-clear header-item" ng-click="goBack()">
+      <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text" style="display: inline-block;">
+        <span class="default-title">Ingredients</span>
+      </span>
+    </button>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <ion-item>
+      <div class="row">
+        <div class="col">
+          <span ng-show="!editing">{{ingredient}}</span>
+          <span ng-hide="!editing">
+            <input type="text" ng-model="new_ingredient" placeholder="What ingredient?" />
+          </span>
+        </div>
+        <div class="col col-25">
+          <button
+            ng-click="editing=true"
+            ng-show="!editing"
+            class="button-right button">Change</button>
+          <button
+            ng-click="editing=false; updateIngredient(new_ingredient)"
+            ng-hide="!editing"
+            class="button-right button">Ok</button>
+        </div>
+      </div>
+    </ion-item>
+
+    <ion-item>
+      <div class="row">
+        <div class="col">
+          {{amount}} {{measurement}} makes {{recipe.serving_size}} servings
+        </div>
+        <div class="col col-25">
+          <button class="button-right button">Change</button>
+        </div>
+      </div>
+    </ion-item>
+  </ion-content>
+</ion-view>
