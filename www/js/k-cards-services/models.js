@@ -25,6 +25,7 @@ angular.module('k-cards-models', [])
     ui.serving_size = recipe_data.serving_size;
     ui.steps = recipe_data.steps;
     ui.name = recipe_data.name;
+    ui.id = recipe_data._id;
 
     ui.getIngredients = getIngredients.bind(ui);
 

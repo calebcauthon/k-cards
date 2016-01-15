@@ -41,6 +41,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     url: '/recipe/:id',
     abstract: true,
     templateUrl: 'templates/recipe-tabs.html',
+    cache: false,
     controller: function($scope, $stateParams) {
       $scope.id = $stateParams.id;
     },
@@ -52,7 +53,6 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       }
     }
   })
-
 
   .state('recipe.view', {
     url: '/steps',
@@ -66,10 +66,21 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
 
   .state('recipe.grocery', {
     url: '/grocery',
+    cache: false,
     views: {
       'tab-grocery': {
         templateUrl: 'templates/tab-grocery.html',
         controller: 'GroceryCtrl'
+      }
+    }
+  })
+
+  .state('recipe.grocery-all', {
+    url: '/all-groceries',
+    views: {
+      'tab-grocery': {
+        templateUrl: 'templates/tab-grocery-all.html',
+        controller: 'AllGroceryCtrl'
       }
     }
   })
@@ -80,6 +91,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
         controller: function($scope, recipe) {
+          $scope.id = recipe.id;
 
           $scope.stepIndexOf = function(ingredient) {
             var step = _.find(recipe.steps, function(step) {
@@ -180,8 +192,6 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       }
     }
   })
-
-  // Each tab has its own nav history stack:
 
   .state('tab.dash', {
     url: '/dash',

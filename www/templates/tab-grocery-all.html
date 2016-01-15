@@ -1,0 +1,28 @@
+<ion-view view-title='Grocery'>
+  <ion-nav-buttons side="left">
+    <a href="#/recipe/{{id}}/grocery">
+      <button class="button back-button hide buttons  button-clear header-item">
+        <i class="icon ion-ios-arrow-back"></i>
+        <span class="back-text" style="display: inline-block;">
+          <span class="default-title">Back</span>
+        </span>
+      </button>
+    </a>
+  </ion-nav-buttons>
+
+  <ion-content class="padding">
+    <ul class="list">
+      <li
+        ng-repeat="grocery in list | orderBy:'text'"
+        class="item">
+        <div class="row">
+          <div class="col">
+            {{grocery.text}}
+          </div>
+          <div class="col col-25">
+            {{grocery.amounts.join(' + ')}}
+          </div>
+      </li>
+    </ul>
+  </ion-content>
+</ion-view>

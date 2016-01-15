@@ -1,12 +1,78 @@
 angular.module('starter.controllers', ['recipeApp.config'])
 
-.controller('GroceryCtrl', function($scope, recipe) {
-  $scope.groceries = [];
-  $scope.recipe = recipe;
+.controller('AllGroceryCtrl', function(grocery, $scope) {
+  $scope.$on('$ionicView.beforeEnter', function() {
+    $scope.list = grocery.list();
+  });
+})
 
-  $scope.ingredients = recipe.getIngredients();
+.service('grocery', function() {
+  this.list = [];
 
-  var groceries = [];
+  function add(ingredient, recipe) {
+    if(typeof(ingredient) == typeof([]) && ingredient.length)
+      return _.map(ingredient, function(this_ingredient) {
+        add.call(this, this_ingredient, recipe);
+      }.bind(this));
+
+    var alreadyAdded = _.find(this.list, function(groceryItem) {
+        return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
+      });
+
+    if(!alreadyAdded)
+      this.list.push({
+        recipe_id: recipe.id,
+        ingredient: ingredient
+      });
+  }
+
+  function remove(ingredient, recipe) {
+    this.list = _.reject(this.list, function(groceryItem) {
+      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
+    });
+  }
+
+  function isInList(ingredient, recipe) {
+    return _.find(this.list, function(groceryItem) {
+      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
+    });
+  }
+
+  function consolidatedList() {
+    var texts = _.chain(this.list).map(function(grocery) {
+      return grocery.ingredient.text
+    }).uniq().value();
+
+    return _.map(texts, function(name) {
+      return {
+        text: name,
+        amounts: _.chain(this.list).select(function(grocery) {
+            return grocery.ingredient.text == name;
+          }).map(function(grocery) {
+            if(grocery.ingredient.measurement)
+              return grocery.ingredient.amount + ' ' + grocery.ingredient.measurement;
+            else
+              return grocery.ingredient.amount;
+          }).value()
+      };
+    }.bind(this));
+  }
+
+  return {
+    add: add.bind(this),
+    remove: remove.bind(this),
+    isInList: isInList.bind(this),
+    list: consolidatedList.bind(this)
+  };
+})
+
+.controller('GroceryCtrl', function($scope, recipe, grocery) {
+  $scope.$on('$ionicView.beforeEnter', function() {
+    $scope.groceries = [];
+    $scope.recipe = recipe;
+
+    $scope.ingredients = recipe.getIngredients();
+  });
 
   $scope.toggleGroceryList = function(ingredient) {
     if($scope.isInGroceryList(ingredient))
@@ -16,38 +82,19 @@ angular.module('starter.controllers', ['recipeApp.config'])
   };
 
   $scope.removeFromGroceryList = function(ingredient) {
-    groceries = _.reject(groceries, function(groceryItem) {
-      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
-    });
+    return grocery.remove(ingredient, recipe);
   };
-
   $scope.addToGroceryList = function(ingredient) {
-    if(typeof(ingredient) == typeof([]) && ingredient.length)
-      return _.map(ingredient, function(this_ingredient) {
-        $scope.addToGroceryList(this_ingredient);
-      });
-
-    var alreadyAdded = _.find(groceries, function(groceryItem) {
-        return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
-      });
-
-    if(!alreadyAdded)
-      groceries.push({
-        recipe: recipe,
-        ingredient: ingredient
-      });
+    return grocery.add(ingredient, recipe);
   };
-
   $scope.isInGroceryList = function(ingredient) {
-    return _.find(groceries, function(groceryItem) {
-      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
-    });
+    return grocery.isInList(ingredient, recipe);
   };
 })
 
 .controller('DashCtrl', function(api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
   $scope.view = function(id) {
-    $state.go('recipe.view', { id: id });
+    $state.go('recipe.grocery', { id: id });
   };
 
   $http.post(api_endpoint + '/recipes').then(function(response) {

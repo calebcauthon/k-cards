@@ -1,4 +1,26 @@
 <ion-view view-title='Grocery'>
+  <ion-nav-buttons side="left">
+    <a href="#/tab/dash">
+      <button class="button back-button hide buttons button-clear header-item">
+        <i class="icon ion-ios-arrow-back"></i>
+        <span class="back-text" style="display: inline-block;">
+          <span class="default-title">Recipes</span>
+        </span>
+      </button>
+    </a>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <a href="#/recipe/{{id}}/all-groceries">
+      <button class="button back-button hide buttons  button-clear header-item">
+        <span class="back-text" style="display: inline-block;">
+          <span class="default-title">All Groceries</span>
+        </span>
+        <i class="icon ion-ios-arrow-forward"></i>
+      </button>
+    </a>
+  </ion-nav-buttons>
+
   <ion-content class="padding">
     <div class="row">
       <div class="col">
@@ -13,7 +35,7 @@
 
     <div class="list list-inset">
       <div
-        ng-repeat="ingredient in ingredients"
+        ng-repeat="ingredient in ingredients | orderBy:'text'"
         ng-click="toggleGroceryList(ingredient)"
         class="item item-radio">
           <div class="radio-content">
