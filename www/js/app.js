@@ -75,6 +75,17 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
+  .state('tab.grocery', {
+    url: '/all-groceries',
+    cache: false,
+    views: {
+      'tab-grocery': {
+        templateUrl: 'templates/tab-grocery-all.html',
+        controller: 'AllGroceryCtrl'
+      }
+    }
+  })
+
   .state('recipe.grocery-all', {
     url: '/all-groceries',
     views: {

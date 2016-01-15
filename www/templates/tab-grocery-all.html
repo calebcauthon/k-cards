@@ -1,6 +1,8 @@
 <ion-view view-title='Grocery'>
   <ion-nav-buttons side="left">
-    <a href="#/recipe/{{id}}/grocery">
+    <a
+      ng-show="id"
+      href="#/recipe/{{id}}/grocery">
       <button class="button back-button hide buttons  button-clear header-item">
         <i class="icon ion-ios-arrow-back"></i>
         <span class="back-text" style="display: inline-block;">
@@ -8,6 +10,18 @@
         </span>
       </button>
     </a>
+
+    <a
+      ng-hide="id"
+      href="#/tab/dash">
+      <button class="button back-button hide buttons  button-clear header-item">
+        <i class="icon ion-ios-arrow-back"></i>
+        <span class="back-text" style="display: inline-block;">
+          <span class="default-title">Back</span>
+        </span>
+      </button>
+    </a>
+
   </ion-nav-buttons>
 
   <ion-content class="padding">
@@ -20,7 +34,9 @@
             {{grocery.text}}
           </div>
           <div class="col col-25">
-            {{grocery.amounts.join(' + ')}}
+            <span ng-repeat="amount in grocery.amounts">
+              {{amount}} <br ng-hide="$last" />
+            </span>
           </div>
       </li>
     </ul>
