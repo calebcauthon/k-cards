@@ -1,5 +1,50 @@
 angular.module('starter.controllers', ['recipeApp.config'])
 
+.controller('GroceryCtrl', function($scope, recipe) {
+  $scope.groceries = [];
+  $scope.recipe = recipe;
+
+  $scope.ingredients = recipe.getIngredients();
+
+  var groceries = [];
+
+  $scope.toggleGroceryList = function(ingredient) {
+    if($scope.isInGroceryList(ingredient))
+      $scope.removeFromGroceryList(ingredient)
+    else
+      $scope.addToGroceryList(ingredient);
+  };
+
+  $scope.removeFromGroceryList = function(ingredient) {
+    groceries = _.reject(groceries, function(groceryItem) {
+      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
+    });
+  };
+
+  $scope.addToGroceryList = function(ingredient) {
+    if(typeof(ingredient) == typeof([]) && ingredient.length)
+      return _.map(ingredient, function(this_ingredient) {
+        $scope.addToGroceryList(this_ingredient);
+      });
+
+    var alreadyAdded = _.find(groceries, function(groceryItem) {
+        return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
+      });
+
+    if(!alreadyAdded)
+      groceries.push({
+        recipe: recipe,
+        ingredient: ingredient
+      });
+  };
+
+  $scope.isInGroceryList = function(ingredient) {
+    return _.find(groceries, function(groceryItem) {
+      return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe == recipe
+    });
+  };
+})
+
 .controller('DashCtrl', function(api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
   $scope.view = function(id) {
     $state.go('recipe.view', { id: id });

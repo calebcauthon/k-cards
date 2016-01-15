@@ -5,3 +5,5 @@
 .steps .item .item-content { white-space: normal; }
 
 .bar-stable .button.button-clear { display: inline-block; }
+
+.radio-icon.checked { visibility: visible !important; }

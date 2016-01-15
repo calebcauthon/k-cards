@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', 'starter.services', 'k-cards-models'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -45,16 +45,10 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       $scope.id = $stateParams.id;
     },
     resolve: {
-      recipe: function($http, $stateParams, api_endpoint) {
+      recipe: function($http, $stateParams, api_endpoint, Recipe) {
         return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
-
-          return {
-            serving_size: response.data.serving_size,
-            steps: response.data.steps,
-            name: response.data.name
-          };
+          return new Recipe(response.data);
         });
-
       }
     }
   })
@@ -66,6 +60,16 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-recipe': {
         templateUrl: 'templates/tab-recipe.html',
         controller: 'RecipeViewCtrl'
+      }
+    }
+  })
+
+  .state('recipe.grocery', {
+    url: '/grocery',
+    views: {
+      'tab-grocery': {
+        templateUrl: 'templates/tab-grocery.html',
+        controller: 'GroceryCtrl'
       }
     }
   })

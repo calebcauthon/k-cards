@@ -1,0 +1,30 @@
+<ion-view view-title='Grocery'>
+  <ion-content class="padding">
+    <div class="row">
+      <div class="col">
+        {{recipe.name}}
+      </div>
+      <div class="col">
+        <button
+          ng-click="addToGroceryList(ingredients)"
+          class="button">Add to grocery list</button>
+      </div>
+    </div>
+
+    <div class="list list-inset">
+      <div
+        ng-repeat="ingredient in ingredients"
+        ng-click="toggleGroceryList(ingredient)"
+        class="item item-radio">
+          <div class="radio-content">
+            <div class="item-content">
+              {{ingredient.text}}
+            </div>
+            <i
+              ng-class="{ 'checked': isInGroceryList(ingredient) }"
+              class="radio-icon ion-checkmark"></i>
+          </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
