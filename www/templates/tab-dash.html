@@ -1,11 +1,19 @@
 <ion-view view-title='Dashboard'>
   <ion-content>
     <ul class='list'>
-      <li 
+      <li
         ng-repeat='data in recipes'
         ng-click='view(data.id)'
-        class='item'>
-          {{data.recipe_name}}
+        class='item item-button-right'>
+
+        <span style="width: 85%;" class="ellipsis">{{data.recipe_name}}</span>
+
+        <button
+          ng-show="isInGroceryList(data.id)"
+          class="button button-small button-balanced">
+          <i class="ion-checkmark"></i>
+          Grocery List
+        </button>
       </li>
     </ul>
   </ion-content>

@@ -7,3 +7,13 @@
 .bar-stable .button.button-clear { display: inline-block; }
 
 .radio-icon.checked { visibility: visible !important; }
+
+.button-small {
+  padding: 2px 4px 1px !important;
+  min-width: 28px !important;
+  min-height: 30px !important;
+  font-size: 12px !important;
+  line-height: 26px !important;
+}
+
+.ellipsis { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

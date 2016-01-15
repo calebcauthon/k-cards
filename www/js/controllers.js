@@ -58,10 +58,17 @@ angular.module('starter.controllers', ['recipeApp.config'])
     }.bind(this));
   }
 
+  function hasIngredientsFrom(recipe_id) {
+    return _.find(this.list, function(grocery) {
+      return grocery.recipe_id == recipe_id;
+    });
+  }
+
   return {
     add: add.bind(this),
     remove: remove.bind(this),
     isInList: isInList.bind(this),
+    hasIngredientsFrom: hasIngredientsFrom.bind(this),
     list: consolidatedList.bind(this)
   };
 })
@@ -92,9 +99,13 @@ angular.module('starter.controllers', ['recipeApp.config'])
   };
 })
 
-.controller('DashCtrl', function(api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
+.controller('DashCtrl', function(grocery, api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
   $scope.view = function(id) {
     $state.go('recipe.grocery', { id: id });
+  };
+
+  $scope.isInGroceryList = function(recipe_id) {
+    return grocery.hasIngredientsFrom(recipe_id);
   };
 
   $http.post(api_endpoint + '/recipes').then(function(response) {
