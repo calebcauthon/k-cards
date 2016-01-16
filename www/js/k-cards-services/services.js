@@ -1,4 +1,4 @@
-angular.module('services', [])
+angular.module('k-cards-services', [])
 
 .service('parseLine', function() {
   function wordAfter(word, full_text) {
