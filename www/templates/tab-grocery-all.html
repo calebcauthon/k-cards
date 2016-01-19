@@ -25,10 +25,23 @@
   </ion-nav-buttons>
 
   <ion-content class="padding">
-    <ul class="list">
-      <li
-        ng-repeat="grocery in list | orderBy:'text'"
-        class="item">
+    <div class="list">
+
+      <div ng-repeat-start="group in list_food_groups" ng-show="false" ></div>
+
+      <div class="item">
+        <div class="row">
+          <div class="col">
+            <strong>{{group}}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div
+        ng-repeat-start="grocery in list | filter:{'food_group':group} | orderBy:'text'"
+        ng-show="false">
+      </div>
+      <div class="item">
         <div class="row">
           <div class="col">
             {{grocery.text}}
@@ -38,7 +51,12 @@
               {{amount}} <br ng-hide="$last" />
             </span>
           </div>
-      </li>
-    </ul>
+        </div>
+      </div>
+      <div ng-repeat-end></div>
+
+      <div ng-repeat-end></div>
+
+    </div>
   </ion-content>
 </ion-view>

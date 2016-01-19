@@ -1,12 +1,19 @@
-angular.module('starter.controllers', ['recipeApp.config'])
+angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
 .controller('AllGroceryCtrl', function(grocery, $scope) {
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.list = grocery.list();
+    $scope.list_food_groups = _.chain($scope.list)
+      .pluck('food_group')
+      .uniq()
+      .select(function(text) {
+        return text && text.length;
+      })
+      .value();
   });
 })
 
-.service('grocery', function() {
+.service('grocery', function(usdaNutrition, $q) {
   this.list = [];
 
   function add(ingredient, recipe) {
@@ -19,11 +26,20 @@ angular.module('starter.controllers', ['recipeApp.config'])
         return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
       });
 
+    var grocery_item = {
+      recipe_id: recipe.id,
+      ingredient: ingredient,
+      food_group: ingredient.food_group
+    };
+
     if(!alreadyAdded)
-      this.list.push({
-        recipe_id: recipe.id,
-        ingredient: ingredient
-      });
+      this.list.push(grocery_item);
+  }
+
+  var promises = [];
+
+  function resolved() {
+    return $q.all(promises);
   }
 
   function remove(ingredient, recipe) {
@@ -39,23 +55,26 @@ angular.module('starter.controllers', ['recipeApp.config'])
   }
 
   function consolidatedList() {
-    var texts = _.chain(this.list).map(function(grocery) {
-      return grocery.ingredient.text
-    }).uniq().value();
+    //return resolved().then(function() {
+      var groceries = _.chain(this.list).uniq(function(grocery) {
+        return grocery.ingredient.text
+      }).value();
 
-    return _.map(texts, function(name) {
-      return {
-        text: name,
-        amounts: _.chain(this.list).select(function(grocery) {
-            return grocery.ingredient.text == name;
-          }).map(function(grocery) {
-            if(grocery.ingredient.measurement)
-              return grocery.ingredient.amount + ' ' + grocery.ingredient.measurement;
-            else
-              return grocery.ingredient.amount;
-          }).value()
-      };
-    }.bind(this));
+      return _.map(groceries, function(grocery) {
+        return {
+          food_group: grocery.food_group,
+          text: grocery.ingredient.text,
+          amounts: _.chain(this.list).select(function(this_grocery) {
+              return this_grocery.ingredient.text == grocery.ingredient.text;
+            }).map(function(this_grocery) {
+              if(this_grocery.ingredient.measurement)
+                return this_grocery.ingredient.amount + ' ' + this_grocery.ingredient.measurement;
+              else
+                return this_grocery.ingredient.amount;
+            }).value()
+        };
+      }.bind(this));
+    //});
   }
 
   function hasIngredientsFrom(recipe_id) {

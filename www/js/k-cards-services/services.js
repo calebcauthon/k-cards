@@ -1,5 +1,30 @@
 angular.module('k-cards-services', [])
 
+.service('usdaNutrition', function($http, api_endpoint) {
+  _.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+  };
+
+  function search(query) {
+    return $http.post(api_endpoint + '/ingredient-category-lookup', { food: query }).then(function(response) {
+      return response.data;
+    });
+  }
+
+  function getGroup(item) {
+    return search(item).then(function(food) {
+      if(food.food_group)
+        return food.food_group.description
+      else
+        return '';
+    });
+  }
+
+  return {
+    getGroup: getGroup
+  };
+})
+
 .service('parseLine', function() {
   function wordAfter(word, full_text) {
     var words_array = full_text.split(' ');

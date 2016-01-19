@@ -11,7 +11,8 @@ angular.module('k-cards-models', [])
         return {
           text: ingredient_words.join(' '),
           amount: Number(step.amounts[0]),
-          measurement: step.measurements[0]
+          measurement: step.measurements[0],
+          food_group: step.ingredient_category
         };
       })
       .select(function(data) {
