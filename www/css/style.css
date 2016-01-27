@@ -17,3 +17,6 @@
 }
 
 .ellipsis { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.item.grocery-group-header { padding: 0; background: #EDEDED; }
+.item.grocery { padding: 0; }

@@ -40,7 +40,8 @@
         class="item item-radio">
           <div class="radio-content">
             <div class="item-content">
-              {{ingredient.text}}
+              {{ingredient.text}} 
+              ({{ingredient.amount}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span>)
             </div>
             <i
               ng-class="{ 'checked': isInGroceryList(ingredient) }"

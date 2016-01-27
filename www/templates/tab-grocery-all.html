@@ -29,7 +29,7 @@
 
       <div ng-repeat-start="group in list_food_groups" ng-show="false" ></div>
 
-      <div class="item">
+      <div class="item grocery-group-header">
         <div class="row">
           <div class="col">
             <strong>{{group}}</strong>
@@ -41,7 +41,7 @@
         ng-repeat-start="grocery in list | filter:{'food_group':group} | orderBy:'text'"
         ng-show="false">
       </div>
-      <div class="item">
+      <div class="item grocery">
         <div class="row">
           <div class="col">
             {{grocery.text}}
