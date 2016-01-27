@@ -43,12 +43,22 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   }
 
   function remove(ingredient, recipe) {
+    if(typeof(ingredient) == typeof([]) && ingredient.length)
+      return _.map(ingredient, function(this_ingredient) {
+        remove.call(this, this_ingredient, recipe);
+      }.bind(this));
+
     this.list = _.reject(this.list, function(groceryItem) {
       return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
     });
   }
 
   function isInList(ingredient, recipe) {
+    if(typeof(ingredient) == typeof([]) && ingredient.length)
+      return _.find(ingredient, function(this_ingredient) {
+        return isInList.call(this, this_ingredient, recipe);
+      }.bind(this));
+
     return _.find(this.list, function(groceryItem) {
       return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
     });

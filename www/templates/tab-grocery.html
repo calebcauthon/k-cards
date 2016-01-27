@@ -26,10 +26,15 @@
       <div class="col">
         {{recipe.name}}
       </div>
-      <div class="col">
+      <div class="col col-75">
         <button
+          ng-hide="isInGroceryList(ingredients)"
           ng-click="addToGroceryList(ingredients)"
-          class="button">Add to grocery list</button>
+          class="button button-balanced">Add to grocery list</button>
+        <button
+          ng-show="isInGroceryList(ingredients)"
+          ng-click="removeFromGroceryList(ingredients)"
+          class="button button-assertive">Remove from grocery list</button>
       </div>
     </div>
 
