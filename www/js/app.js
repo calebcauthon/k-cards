@@ -84,6 +84,28 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
+  .state('recipe.ask-ingredients', {
+    url: '/ask-how-much',
+    cache: false,
+    views: {
+      'tab-grocery': {
+        templateUrl: 'templates/tab-ask.html',
+        controller: 'AskHowMuchCtrl'
+      }
+    }
+  })
+
+  .state('recipe.ingredients-ask-ingredients', {
+    url: '/ingredients-ask-how-much',
+    cache: false,
+    views: {
+      'tab-ingredients': {
+        templateUrl: 'templates/tab-ask.html',
+        controller: 'AskHowMuchCtrl'
+      }
+    }
+  })
+
   .state('tab.grocery', {
     url: '/all-groceries',
     cache: false,
@@ -91,17 +113,6 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-grocery': {
         templateUrl: 'templates/tab-grocery-all.html',
         controller: 'AllGroceryCtrl'
-      }
-    }
-  })
-
-  .state('recipe.ask-ingredients', {
-    url: '/ask-how-much',
-    cache: false,
-    views: {
-      'tab-grocery': {
-        templateUrl: 'templates/tab-grocery-ask.html',
-        controller: 'AskHowMuchCtrl'
       }
     }
   })
@@ -121,7 +132,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     views: {
       'tab-ingredients': {
         templateUrl: 'templates/tab-ingredients.html',
-        controller: function($scope, recipe) {
+        controller: function($scope, $state, recipe) {
           $scope.id = recipe.id;
 
           $scope.stepIndexOf = function(ingredient) {
@@ -132,13 +143,11 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
             return _.indexOf(recipe.steps, step);
           };
 
-          $scope.setServingSize = function(size) {
-            $scope.serving_size = Number(size);
-            recipe.serving_ratio = $scope.serving_size / recipe.serving_size;
-          };
-
           $scope.recipe = recipe;
-          $scope.setServingSize(recipe.serving_size);
+
+          $scope.askHowMuch = function(ingredients) {
+            $state.go('recipe.ingredients-ask-ingredients');
+          };
 
           $scope.$on('$ionicView.beforeEnter', function() {
             $scope.ingredients = _.chain(recipe.steps)

@@ -12,18 +12,12 @@
         <div class="col col-50">
           <div class="row">
             <div class="col">
-              <ion-icon
-                ng-click="setServingSize(serving_size == 1 ? 1 : serving_size - 1)"
-                class="ion-minus-round"></ion-icon>
-              <span>{{serving_size}}</span>
-              <ion-icon
-                ng-click="setServingSize(serving_size + 1)"
-                class="ion-plus-round"></ion-icon>
+              <span>{{recipe.serving_size * recipe.serving_ratio}}</span>
             </div>
             <div class="col col-30">
               <button
-                ng-click="setServingSize(recipe.serving_size)"
-                class="button button-small">Reset</button>
+                ng-click="askHowMuch()"
+                class="button button-small">Change</button>
             </div>
           </div>
         </div>
