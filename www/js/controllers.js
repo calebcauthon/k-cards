@@ -59,6 +59,12 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 .service('grocery', function(usdaNutrition, $q) {
   this.list = [];
 
+  function get(ingredient, recipe) {
+    return _.find(this.list, function(grocery) {
+      return grocery.recipe_id == recipe.id && grocery.ingredient.text == ingredient.text;
+    });
+  }
+
   function add(ingredient, recipe) {
     if(typeof(ingredient) == typeof([]) && ingredient.length)
       return _.map(ingredient, function(this_ingredient) {
@@ -72,6 +78,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
     var grocery_item = {
       recipe_id: recipe.id,
       ingredient: ingredient,
+      serving_ratio: recipe.serving_ratio,
       food_group: ingredient.food_group
     };
 
@@ -121,9 +128,9 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
               return this_grocery.ingredient.text == grocery.ingredient.text;
             }).map(function(this_grocery) {
               if(this_grocery.ingredient.measurement)
-                return this_grocery.ingredient.amount + ' ' + this_grocery.ingredient.measurement;
+                return this_grocery.ingredient.amount * this_grocery.serving_ratio + ' ' + this_grocery.ingredient.measurement;
               else
-                return this_grocery.ingredient.amount;
+                return this_grocery.ingredient.amount * this_grocery.serving_ratio;
             }).value()
         };
       }.bind(this));
@@ -137,6 +144,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   }
 
   return {
+    get: get.bind(this),
     add: add.bind(this),
     remove: remove.bind(this),
     isInList: isInList.bind(this),
@@ -155,7 +163,11 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
   $scope.askHowMuch = function(ingredients) {
     $state.go('recipe.ask-ingredients');
-  }
+  };
+
+  $scope.groceryItem = function(ingredient) {
+    return grocery.get(ingredient, recipe);
+  };
 
   $scope.toggleGroceryList = function(ingredient) {
     if($scope.isInGroceryList(ingredient))
