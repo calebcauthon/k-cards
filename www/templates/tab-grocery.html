@@ -27,10 +27,22 @@
         {{recipe.name}}
       </div>
       <div class="col col-75">
+        <span>{{(recipe.serving_ratio || 1) * recipe.serving_size}} servings</span>
+        <span ng-show="recipe.serving_ratio != 1">
+          / {{recipe.serving_ratio}}x
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-75">
         <button
           ng-hide="isInGroceryList(ingredients)"
           ng-click="addToGroceryList(ingredients)"
           class="button button-balanced">Add to grocery list</button>
+        <button
+          ng-hide="isInGroceryList(ingredients)"
+          ng-click="askHowMuch(ingredeints)"
+          class="button button-balanced"><i class="icon ion-more"></i></button>
         <button
           ng-show="isInGroceryList(ingredients)"
           ng-click="removeFromGroceryList(ingredients)"
@@ -46,7 +58,7 @@
           <div class="radio-content">
             <div class="item-content">
               {{ingredient.text}} 
-              ({{ingredient.amount}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span>)
+              ({{ingredient.amount * (recipe.serving_ratio || 1)}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span>)
             </div>
             <i
               ng-class="{ 'checked': isInGroceryList(ingredient) }"

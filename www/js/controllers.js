@@ -1,5 +1,48 @@
 angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
+.controller('AskHowMuchCtrl', function($scope, $state, $ionicHistory, recipe) {
+  $scope.recipe = recipe;
+
+  $scope.cancel = function() {
+    $ionicHistory.goBack();
+  };
+
+  $scope.saveServingSize = function() {
+    recipe.serving_ratio = $scope.multiplier;
+    $ionicHistory.goBack();
+  };
+
+  $scope.setMultiplier = function(value) {
+    $scope.multiplier = value;
+    $scope.servings = recipe.serving_size * $scope.multiplier;
+  };
+
+  $scope.setServings = function(value) {
+    $scope.servings = value;
+    $scope.multiplier = $scope.servings / recipe.serving_size;
+  };
+
+  $scope.incrementServings = function() {
+    $scope.setServings($scope.servings + 1);
+  };
+
+  $scope.decrementServings = function() {
+    $scope.setServings($scope.servings - 1);
+  };
+
+  $scope.incrementMultiplier = function() {
+    $scope.setMultiplier($scope.multiplier + 1);
+  };
+
+  $scope.decrementMultiplier = function() {
+    $scope.setMultiplier($scope.multiplier - 1);
+  };
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+    $scope.setMultiplier(recipe.serving_ratio || 1);
+  });
+})
+
 .controller('AllGroceryCtrl', function(grocery, $scope) {
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.list = grocery.list();
@@ -102,13 +145,17 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   };
 })
 
-.controller('GroceryCtrl', function($scope, recipe, grocery) {
+.controller('GroceryCtrl', function($scope, $state, recipe, grocery) {
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.groceries = [];
     $scope.recipe = recipe;
 
     $scope.ingredients = recipe.getIngredients();
   });
+
+  $scope.askHowMuch = function(ingredients) {
+    $state.go('recipe.ask-ingredients');
+  }
 
   $scope.toggleGroceryList = function(ingredient) {
     if($scope.isInGroceryList(ingredient))

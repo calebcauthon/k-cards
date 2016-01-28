@@ -46,11 +46,20 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       $scope.id = $stateParams.id;
     },
     resolve: {
-      recipe: function($http, $stateParams, api_endpoint, Recipe) {
-        return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
-          return new Recipe(response.data);
-        });
-      }
+      recipe: function() {
+        var cache = {};
+
+        return function($http, $stateParams, api_endpoint, Recipe) {
+          return $http.get(api_endpoint + '/recipe/' + $stateParams.id).then(function(response) {
+            if(cache[$stateParams.id])
+              return cache[$stateParams.id];
+
+            var recipe = new Recipe(response.data);
+            cache[$stateParams.id] = recipe;
+            return recipe;
+          });
+        };
+      }()
     }
   })
 
@@ -82,6 +91,17 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
       'tab-grocery': {
         templateUrl: 'templates/tab-grocery-all.html',
         controller: 'AllGroceryCtrl'
+      }
+    }
+  })
+
+  .state('recipe.ask-ingredients', {
+    url: '/ask-how-much',
+    cache: false,
+    views: {
+      'tab-grocery': {
+        templateUrl: 'templates/tab-grocery-ask.html',
+        controller: 'AskHowMuchCtrl'
       }
     }
   })

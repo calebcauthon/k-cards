@@ -1,8 +1,6 @@
 angular.module('k-cards-models', [])
 
 .factory('Recipe', function() {
-  var ui = {};
-
   function getIngredients() {
     return _.chain(this.steps)
       .map(function(step) {
@@ -21,8 +19,11 @@ angular.module('k-cards-models', [])
   }
 
   return function(recipe_data) {
+    var ui = {};
+
     this.data = recipe_data;
 
+    ui.serving_ratio = 1;
     ui.serving_size = recipe_data.serving_size;
     ui.steps = recipe_data.steps;
     ui.name = recipe_data.name;
