@@ -117,8 +117,34 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
+  .state('recipe.list-settings', {
+    url: '/grocery-list-settings/:name',
+    cache: false,
+    resolve: {
+      groceryList: function($stateParams, grocery) {
+        return grocery.getLatestsGroceryLists().then(function(lists) {
+          return _.find(lists, function(list) {
+            return list.name == $stateParams.name;
+          });
+        });
+      }
+    },
+    views: {
+      'tab-grocery': {
+        templateUrl:  'templates/tab-list-settings.html',
+        controller: 'ListSettingsCtrl'
+      }
+    }
+  })
+
   .state('recipe.grocery-all', {
     url: '/all-groceries',
+    cache: false,
+    resolve: {
+      lists: function($http, api_endpoint, grocery) {
+        return grocery.getLatestsGroceryLists();
+      }
+    },
     views: {
       'tab-grocery': {
         templateUrl: 'templates/tab-grocery-all.html',

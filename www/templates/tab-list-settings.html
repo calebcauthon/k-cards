@@ -1,0 +1,16 @@
+<ion-view view-title='Grocery List'>
+  <ion-content class="padding">
+    <div class="list">
+      <div class="item">
+        Name <input ng-model="list.name" />
+      </div>
+      <div class="item">
+        <button
+          ng-click="destroy()"
+          class="button button-assertive">Delete</button>
+        <button class="button button-balanced">Save</button>
+        <br style="clear:both;" />
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

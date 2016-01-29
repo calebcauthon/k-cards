@@ -58,10 +58,9 @@
           <div class="radio-content">
             <div class="item-content">
               {{ingredient.text}}
-              ({{ingredient.amount}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span>
-              <span ng-show="isInGroceryList(ingredient) && groceryItem(ingredient).serving_ratio != 1">
-                x {{groceryItem(ingredient).serving_ratio}}
-                </span>)
+              ({{ingredient.amount}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span><span 
+                ng-show="isInGroceryList(ingredient) && groceryItem(ingredient).serving_ratio != 1">
+                x {{groceryItem(ingredient).serving_ratio}}</span>)
             </div>
             <i
               ng-class="{ 'checked': isInGroceryList(ingredient) }"
