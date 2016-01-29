@@ -6,16 +6,12 @@ navigation history that also transitions its views in and out.
 <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
   <div>
-    <ion-tab title="Grocery" icon-off="ion-ios-cart-outline" icon-on="ion-ios-cart" href="#/recipe/{{id}}/grocery">
+    <ion-tab title="Recipes" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/tab/dash">
+      <ion-nav-view name="tab-dash"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Grocery" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/all-groceries">
       <ion-nav-view name="tab-grocery"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Recipe" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/recipe/{{id}}/steps">
-      <ion-nav-view name="tab-recipe"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Ingredients" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/recipe/{{id}}/ingredients">
-      <ion-nav-view name="tab-ingredients"></ion-nav-view>
     </ion-tab>
   </div>
 

@@ -4,19 +4,8 @@
       <button class="button back-button hide buttons button-clear header-item">
         <i class="icon ion-ios-arrow-back"></i>
         <span class="back-text" style="display: inline-block;">
-          <span class="default-title">Recipes</span>
+          <span class="default-title">Back</span>
         </span>
-      </button>
-    </a>
-  </ion-nav-buttons>
-
-  <ion-nav-buttons side="right">
-    <a href="#/recipe/{{id}}/all-groceries">
-      <button class="button back-button hide buttons  button-clear header-item">
-        <span class="back-text" style="display: inline-block;">
-          <span class="default-title">All Groceries</span>
-        </span>
-        <i class="icon ion-ios-arrow-forward"></i>
       </button>
     </a>
   </ion-nav-buttons>
@@ -34,11 +23,11 @@
       </div>
     </div>
     <div class="row">
-      <div class="col col-75">
+      <div class="col col-80">
         <button
           ng-hide="isInGroceryList(ingredients)"
           ng-click="addToGroceryList(ingredients)"
-          class="button button-balanced">Add to grocery list</button>
+          class="button button-balanced">Add to grocery</button>
         <button
           ng-hide="isInGroceryList(ingredients)"
           ng-click="askHowMuch(ingredeints)"
@@ -46,8 +35,14 @@
         <button
           ng-show="isInGroceryList(ingredients)"
           ng-click="removeFromGroceryList(ingredients)"
-          class="button button-assertive">Remove from grocery list</button>
+          class="button button-assertive">Remove from grocery</button>
       </div>
+      <div class="col">
+        <button
+          ng-click="viewRecipe()"
+          class="button button-positive">Cook</button>
+      </div>
+
     </div>
 
     <div class="list list-inset">

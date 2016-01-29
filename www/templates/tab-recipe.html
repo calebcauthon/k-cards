@@ -3,8 +3,16 @@
     <button class="button back-button hide buttons  button-clear header-item" ng-click="goBack()">
       <i class="icon ion-ios-arrow-back"></i>
       <span class="back-text" style="display: inline-block;">
-        <span class="default-title">Recipes</span>
+        <span class="default-title">Back</span>
       </span>
+    </button>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <button
+      ng-click="viewIngredients()"
+      class="button back-button hide buttons button-clear header-item">
+      <i class="icon ion-gear-b"></i>
     </button>
   </ion-nav-buttons>
 

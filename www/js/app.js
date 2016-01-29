@@ -66,7 +66,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
   .state('recipe.view', {
     url: '/steps',
     views: {
-      'tab-recipe': {
+      'tab-dash': {
         templateUrl: 'templates/tab-recipe.html',
         controller: 'RecipeViewCtrl'
       }
@@ -77,7 +77,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     url: '/grocery',
     cache: false,
     views: {
-      'tab-grocery': {
+      'tab-dash': {
         templateUrl: 'templates/tab-grocery.html',
         controller: 'GroceryCtrl'
       }
@@ -88,7 +88,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     url: '/ask-how-much',
     cache: false,
     views: {
-      'tab-grocery': {
+      'tab-dash': {
         templateUrl: 'templates/tab-ask.html',
         controller: 'AskHowMuchCtrl'
       }
@@ -99,7 +99,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     url: '/ingredients-ask-how-much',
     cache: false,
     views: {
-      'tab-ingredients': {
+      'tab-dash': {
         templateUrl: 'templates/tab-ask.html',
         controller: 'AskHowMuchCtrl'
       }
@@ -109,6 +109,11 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
   .state('tab.grocery', {
     url: '/all-groceries',
     cache: false,
+    resolve: {
+      lists: function(grocery) {
+        return grocery.getLatestsGroceryLists();
+      }
+    },
     views: {
       'tab-grocery': {
         templateUrl: 'templates/tab-grocery-all.html',
@@ -117,7 +122,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
-  .state('recipe.list-settings', {
+  .state('tab.list-settings', {
     url: '/grocery-list-settings/:name',
     cache: false,
     resolve: {
@@ -156,9 +161,11 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
   .state('recipe.ingredients', {
     url: '/ingredients',
     views: {
-      'tab-ingredients': {
+      'tab-dash': {
         templateUrl: 'templates/tab-ingredients.html',
-        controller: function($scope, $state, recipe) {
+        controller: function($ionicHistory, $scope, $state, recipe) {
+          $scope.goBack = function() { $ionicHistory.goBack() };
+
           $scope.id = recipe.id;
 
           $scope.stepIndexOf = function(ingredient) {
@@ -261,6 +268,7 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
 
   .state('tab.dash', {
     url: '/dash',
+    cached: false,
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',

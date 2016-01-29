@@ -43,62 +43,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   });
 })
 
-.controller('AllGroceryCtrl', function($state, $http, api_endpoint, grocery, lists, $scope) {
-  $scope.groceryLists = lists;
-
-  $scope.$on('$ionicView.beforeEnter', function() {
-    $scope.list = grocery.list();
-    $scope.list_name = grocery.data().name;
-
-    $scope.list_food_groups = _.chain($scope.list)
-      .pluck('food_group')
-      .uniq()
-      .select(function(text) {
-        return text && text.length;
-      })
-      .value();
-
-    $scope.show_new = false;
-  });
-
-  $scope.use = function(groceryListData) {
-    grocery.setList(groceryListData.list, groceryListData.name, groceryListData._id);
-    $scope.list_name = grocery.data().name;
-
-    $scope.list = grocery.list();
-    $scope.list_food_groups = _.chain($scope.list)
-      .pluck('food_group')
-      .uniq()
-      .select(function(text) {
-        return text && text.length;
-      })
-      .value();
-  };
-
-  $scope.showNew = function() {
-    $scope.show_new = true;
-  };
-
-  $scope.showGroceryListSettings = function(list) {
-    $state.go('recipe.list-settings', { name: list.name });
-  };
-
-  $scope.createNewGroceryList = function(name) {
-    $scope.show_new = false;
-    $http.post(api_endpoint + '/save-grocery-list', {
-      name: name,
-      list: []
-    }).then(function(response) {
-      grocery.getLatestsGroceryLists().then(function(lists) {
-        $scope.groceryLists = lists
-      });
-    });
-  };
-
-  $scope.save = function() {
-    $http.post(api_endpoint + '/update-grocery-list', grocery.data());
-  };
-})
+.controller('AllGroceryCtrl', AllGroceryCtrl)
 
 .controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList, grocery) {
   $scope.list = groceryList;
@@ -119,6 +64,9 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   };
 
   $scope.save = function() {
+    if(grocery.data().id == groceryList._id)
+      grocery.setName(groceryList.name);
+
     $http.post(api_endpoint + '/update-grocery-list', {
       id: groceryList._id,
       name: groceryList.name,
@@ -344,6 +292,10 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   $scope.isInGroceryList = function(ingredient) {
     return grocery.isInList(ingredient, recipe);
   };
+
+  $scope.viewRecipe = function() {
+    $state.go('recipe.view', { recipe: recipe });
+  };
 })
 
 .controller('DashCtrl', function(grocery, api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
@@ -386,8 +338,12 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   };
 })
 
-.controller('RecipeViewCtrl', function($state, $scope, recipe, $ionicNavBarDelegate) {
-  $scope.goBack = function() { $state.go('tab.dash'); };
+.controller('RecipeViewCtrl', function($state, $ionicHistory, $scope, recipe, $ionicNavBarDelegate) {
+  $scope.goBack = function() { $ionicHistory.goBack() };
+  $scope.viewIngredients = function() {
+    $state.go('recipe.ingredients');
+  };
+
   $scope.recipe = recipe;
 
   $scope.interpolatedStep = function(step) {

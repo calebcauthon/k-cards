@@ -1,32 +1,25 @@
-<ion-view view-title='Grocery' ng-init="listName = '1/28/2016 Grocery List'">
+<ion-view view-title='{{list_name}}'>
   <ion-nav-buttons side="left">
-    <a
-      ng-show="id"
-      href="#/recipe/{{id}}/grocery">
-      <button class="button back-button hide buttons  button-clear header-item">
-        <i class="icon ion-ios-arrow-back"></i>
-        <span class="back-text" style="display: inline-block;">
-          <span class="default-title">Back</span>
-        </span>
-      </button>
-    </a>
+    <button
+      ng-click="goBack()"
+      class="button back-button hide buttons button-clear header-item">
+      <i class="icon ion-ios-arrow-back"></i>
+      <span class="back-text" style="display: inline-block;">
+        <span class="default-title">Back</span>
+      </span>
+    </button>
+  </ion-nav-buttons>
 
-    <a
-      ng-hide="id"
-      href="#/tab/dash">
-      <button class="button back-button hide buttons  button-clear header-item">
-        <i class="icon ion-ios-arrow-back"></i>
-        <span class="back-text" style="display: inline-block;">
-          <span class="default-title">Back</span>
-        </span>
-      </button>
-    </a>
-
+  <ion-nav-buttons side="right">
+    <button
+      ng-click="showGroceryListSettings(list_name)"
+      class="button back-button hide buttons button-clear header-item">
+      <i class="icon ion-gear-b"></i>
+    </button>
   </ion-nav-buttons>
 
   <ion-content class="padding">
     <div class="list">
-
       <div
         class="item grocery-group-header"
         ng-show="list_food_groups.length == 0">
@@ -79,7 +72,7 @@
         class="item item-button-right item-icon-left"
         ng-repeat='list in groceryLists'>
         <i
-          ng-click="showGroceryListSettings(list)"
+          ng-click="showGroceryListSettings(list.name)"
           class="icon ion-gear-b"></i>
         {{list.name}}
         <button
