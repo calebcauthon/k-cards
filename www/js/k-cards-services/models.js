@@ -6,9 +6,12 @@ angular.module('k-cards-models', [])
       .map(function(step) {
         var ingredient_words = step.ingredients;
 
+        var amount = Number(step.amounts[0]);
+        if(isNaN(amount))
+          amount = 1;
         return {
           text: ingredient_words.join(' '),
-          amount: Number(step.amounts[0]),
+          amount: amount,
           measurement: step.measurements[0],
           food_group: step.ingredient_category
         };
