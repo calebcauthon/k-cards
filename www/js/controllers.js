@@ -94,6 +94,10 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
       });
     });
   };
+
+  $scope.save = function() {
+    $http.post(api_endpoint + '/update-grocery-list', grocery.data());
+  };
 })
 
 .controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList) {
@@ -203,6 +207,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
       return _.map(groceries, function(grocery) {
         return {
+          grocery_item: grocery,
           food_group: grocery.food_group,
           text: grocery.ingredient.text,
           amounts: _.chain(this.list).select(function(this_grocery) {

@@ -41,18 +41,24 @@
         ng-repeat-start="grocery in list | filter:{'food_group':group} | orderBy:'text'"
         ng-show="false">
       </div>
-      <div class="item grocery">
-        <div class="row">
-          <div class="col">
+      <ion-checkbox
+        ng-click="save()"
+        ng-model="grocery.grocery_item.picked_up">
+          <span style="top: 50%; position: absolute; margin-top: -.75em;">
             {{grocery.text}}
-          </div>
-          <div class="col col-25">
-            <span ng-repeat="amount in grocery.amounts">
-              {{amount}} <br ng-hide="$last" />
+          </span>
+
+          <div style="float:right;">
+            <span
+              style="text-align:right;"
+              ng-repeat="amount in grocery.amounts">
+              {{amount}}
+              <br ng-hide="$last" />
             </span>
+
           </div>
-        </div>
-      </div>
+          <br style="clear:both;" />
+      </ion-checkbox>
       <div ng-repeat-end></div>
 
       <div ng-repeat-end></div>
