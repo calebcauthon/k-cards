@@ -100,11 +100,22 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   };
 })
 
-.controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList) {
+.controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList, grocery) {
   $scope.list = groceryList;
 
   $scope.goBack = function() {
     $ionicHistory.goBack();
+  };
+
+  $scope.clear = function() {
+    $http.post(api_endpoint + '/update-grocery-list', {
+      id: groceryList._id,
+      name: groceryList.name,
+      list: []
+    }).then(function(response) {
+      grocery.setList([], groceryList.name, groceryList._id);
+      $ionicHistory.goBack();
+    });
   };
 
   $scope.save = function() {
@@ -126,7 +137,35 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 })
 
 .service('grocery', function(usdaNutrition, $q, $http, api_endpoint) {
-  this.list = [];
+  var list = [];
+  var name = null;
+  var id = null;
+
+  var self = {};
+
+  function loadDefault() {
+    getLatestsGroceryLists().then(function(lists) {
+      var default_list = _.find(lists, function(list) {
+        return list.name == 'My Grocery List';
+      });
+
+      if(!default_list) {
+        $http.post(api_endpoint + '/save-grocery-list', {
+          name: 'My Grocery List',
+          list: list
+        }).then(function(response) {
+          getLatestsGroceryLists().then(function(lists) {
+            var saved_list = _.find(lists, function(list) {
+              return list.name == 'My Grocery List';
+            });
+            self.setList(saved_list.list, saved_list.name, saved_list._id);
+          });
+        });
+      } else {
+        self.setList(default_list.list, default_list.name, default_list.id);
+      }
+    });
+  }
 
   function getLatestsGroceryLists() {
     return $http.post(api_endpoint + '/get-grocery-lists').then(function(response) {
@@ -136,24 +175,24 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
   function data() {
     return {
-      name: this.name,
-      list: this.list,
-      id: this.id
+      name: name,
+      list: list,
+      id: id
     };
   };
 
-  function setName(name) {
-    this.name = name;
+  function setName(new_name) {
+    name = new_name;
   };
 
-  function setList(list, name, id) {
-    this.name = name;
-    this.list = list;
-    this.id = id;
+  function setList(new_list, new_name, new_id) {
+    name = new_name;
+    list = new_list;
+    id = new_id;
   };
 
   function get(ingredient, recipe) {
-    return _.find(this.list, function(grocery) {
+    return _.find(list, function(grocery) {
       return grocery.recipe_id == recipe.id && grocery.ingredient.text == ingredient.text;
     });
   }
@@ -164,7 +203,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
         add.call(this, this_ingredient, recipe);
       }.bind(this));
 
-    var alreadyAdded = _.find(this.list, function(groceryItem) {
+    var alreadyAdded = _.find(list, function(groceryItem) {
         return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
       });
 
@@ -176,7 +215,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
     };
 
     if(!alreadyAdded)
-      this.list.push(grocery_item);
+      list.push(grocery_item);
   }
 
   var promises = [];
@@ -191,7 +230,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
         remove.call(this, this_ingredient, recipe);
       }.bind(this));
 
-    this.list = _.reject(this.list, function(groceryItem) {
+    list = _.reject(list, function(groceryItem) {
       return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
     });
   }
@@ -202,14 +241,14 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
         return isInList.call(this, this_ingredient, recipe);
       }.bind(this));
 
-    return _.find(this.list, function(groceryItem) {
+    return _.find(list, function(groceryItem) {
       return groceryItem.ingredient.text == ingredient.text && groceryItem.recipe_id == recipe.id
     });
   }
 
   function consolidatedList() {
     //return resolved().then(function() {
-      var groceries = _.chain(this.list).uniq(function(grocery) {
+      var groceries = _.chain(list).uniq(function(grocery) {
         return grocery.ingredient.text
       }).value();
 
@@ -218,7 +257,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
           grocery_item: grocery,
           food_group: grocery.food_group,
           text: grocery.ingredient.text,
-          amounts: _.chain(this.list).select(function(this_grocery) {
+          amounts: _.chain(list).select(function(this_grocery) {
               return this_grocery.ingredient.text == grocery.ingredient.text;
             }).map(function(this_grocery) {
               if(this_grocery.ingredient.measurement)
@@ -232,23 +271,24 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   }
 
   function hasIngredientsFrom(recipe_id) {
-    return _.find(this.list, function(grocery) {
+    return _.find(list, function(grocery) {
       return grocery.recipe_id == recipe_id;
     });
   }
 
-  return {
-    getLatestsGroceryLists: getLatestsGroceryLists.bind(this),
-    setList: setList.bind(this),
-    setName: setName.bind(this),
-    get: get.bind(this),
-    add: add.bind(this),
-    remove: remove.bind(this),
-    isInList: isInList.bind(this),
-    hasIngredientsFrom: hasIngredientsFrom.bind(this),
-    list: consolidatedList.bind(this),
-    data: data.bind(this)
-  };
+  self.getLatestsGroceryLists = getLatestsGroceryLists.bind(this);
+  self.loadDefault = loadDefault.bind(this);
+  self.setList = setList.bind(this);
+  self.setName = setName.bind(this);
+  self.get = get.bind(this);
+  self.add = add.bind(this);
+  self.remove = remove.bind(this);
+  self.isInList = isInList.bind(this);
+  self.hasIngredientsFrom = hasIngredientsFrom.bind(this);
+  self.list = consolidatedList.bind(this);
+  self.data = data.bind(this);
+
+  return self;
 })
 
 .controller('GroceryCtrl', function($http, api_endpoint, $scope, $state, recipe, grocery) {
@@ -307,16 +347,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 })
 
 .controller('DashCtrl', function(grocery, api_endpoint, $ionicNavBarDelegate, $http, $scope, $state) {
-  $scope.$on('$ionicView.beforeEnter', function() {
-    if(!grocery.data().name) {
-      grocery.getLatestsGroceryLists().then(function(lists) {
-        var default_list = _.find(lists, function(list) {
-          return list.name == 'My Grocery List';
-        });
-        grocery.setList(default_list.list, default_list.name, default_list.id);
-      });
-    }
-  });
+  grocery.loadDefault();
 
   $scope.view = function(id) {
     $state.go('recipe.grocery', { id: id });

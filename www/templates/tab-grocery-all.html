@@ -27,6 +27,15 @@
   <ion-content class="padding">
     <div class="list">
 
+      <div
+        class="item grocery-group-header"
+        ng-show="list_food_groups.length == 0">
+        <div class="row">
+          <div class="col">
+            <strong>This list is empty.</strong>
+          </div>
+        </div>
+      </div>
       <div ng-repeat-start="group in list_food_groups" ng-show="false" ></div>
 
       <div class="item grocery-group-header">

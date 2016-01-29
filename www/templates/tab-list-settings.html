@@ -1,8 +1,12 @@
 <ion-view view-title='Grocery List'>
   <ion-content class="padding">
     <div class="list">
-      <div class="item">
+      <div class="item item-button-right">
         Name <input ng-model="list.name" />
+
+        <button
+          ng-click="clear()"
+          class="button button-assertive">Clear</button>
       </div>
       <div class="item">
         <button
