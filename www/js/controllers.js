@@ -103,6 +103,10 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 .controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList) {
   $scope.list = groceryList;
 
+  $scope.goBack = function() {
+    $ionicHistory.goBack();
+  };
+
   $scope.save = function() {
     $http.post(api_endpoint + '/update-grocery-list', {
       id: groceryList._id,
