@@ -162,7 +162,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
           });
         });
       } else {
-        self.setList(default_list.list, default_list.name, default_list.id);
+        self.setList(default_list.list, default_list.name, default_list._id);
       }
     });
   }
