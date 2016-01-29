@@ -48,6 +48,8 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.list = grocery.list();
+    $scope.list_name = grocery.data().name;
+
     $scope.list_food_groups = _.chain($scope.list)
       .pluck('food_group')
       .uniq()
@@ -60,7 +62,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   });
 
   $scope.use = function(groceryListData) {
-    grocery.setList(groceryListData.list, groceryListData.name);
+    grocery.setList(groceryListData.list, groceryListData.name, groceryListData._id);
     $scope.list_name = grocery.data().name;
 
     $scope.list = grocery.list();
@@ -85,7 +87,7 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
     $scope.show_new = false;
     $http.post(api_endpoint + '/save-grocery-list', {
       name: name,
-      list: grocery.data().list
+      list: []
     }).then(function(response) {
       grocery.getLatestsGroceryLists().then(function(lists) {
         $scope.groceryLists = lists
@@ -96,6 +98,17 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
 
 .controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList) {
   $scope.list = groceryList;
+
+  $scope.save = function() {
+    $http.post(api_endpoint + '/update-grocery-list', {
+      id: groceryList._id,
+      name: groceryList.name,
+      list: groceryList.list
+    }).then(function(response) {
+    });
+
+    $ionicHistory.goBack();
+  };
 
   $scope.destroy = function() {
     $http.post(api_endpoint + '/destroy-grocery-list', { id: groceryList._id }).then(function() {
@@ -116,13 +129,15 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   function data() {
     return {
       name: this.name,
-      list: this.list
+      list: this.list,
+      id: this.id
     };
   };
 
-  function setList(list, name) {
+  function setList(list, name, id) {
     this.name = name;
     this.list = list;
+    this.id = id;
   };
 
   function get(ingredient, recipe) {
@@ -222,13 +237,17 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
   };
 })
 
-.controller('GroceryCtrl', function($scope, $state, recipe, grocery) {
+.controller('GroceryCtrl', function($http, api_endpoint, $scope, $state, recipe, grocery) {
   $scope.$on('$ionicView.beforeEnter', function() {
     $scope.groceries = [];
     $scope.recipe = recipe;
 
     $scope.ingredients = recipe.getIngredients();
   });
+
+  function save() {
+    $http.post(api_endpoint + '/update-grocery-list', grocery.data());
+  };
 
   $scope.askHowMuch = function(ingredients) {
     $state.go('recipe.ask-ingredients');
@@ -243,6 +262,8 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services'])
       $scope.removeFromGroceryList(ingredient)
     else
       $scope.addToGroceryList(ingredient);
+
+    save();
   };
 
   $scope.removeFromGroceryList = function(ingredient) {
