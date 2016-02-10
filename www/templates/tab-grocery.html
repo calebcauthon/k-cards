@@ -18,6 +18,16 @@
     </div>
 
     <div class="row">
+      <div class="col text-center">
+        <p ng-hide="isInGroceryList(ingredients)">This recipe is <strong>not</strong> in your grocery list</p>
+        <p ng-show="isInGroceryList(ingredients)" class="balanced"><i class="icon ion-checkmark"></i>This recipe is in your grocery list!</p>
+      </div>
+      <div class="col text-center">
+        <p>You have made this recipe <strong>2</strong> times before.</p>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col">
         <button class="button button-balanced button-full ion-ios-cart icon-left">Groceries</button>
       </div>
