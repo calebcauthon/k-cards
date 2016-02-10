@@ -12,54 +12,60 @@
 
   <ion-content class="padding">
     <div class="row">
-      <div class="col">
-        {{recipe.name}}
-      </div>
-      <div class="col col-75">
-        <span>{{(recipe.serving_ratio || 1) * recipe.serving_size}} servings</span>
-        <span ng-show="recipe.serving_ratio != 1">
-          / {{recipe.serving_ratio}}x
-        </span>
+      <div class="col text-center">
+        <h3>{{recipe.name}}</h3>
       </div>
     </div>
+
     <div class="row">
-      <div class="col col-80">
-        <button
-          ng-hide="isInGroceryList(ingredients)"
-          ng-click="addToGroceryList(ingredients)"
-          class="button button-balanced">Add to grocery</button>
-        <button
-          ng-hide="isInGroceryList(ingredients)"
-          ng-click="askHowMuch(ingredeints)"
-          class="button button-balanced"><i class="icon ion-more"></i></button>
-        <button
-          ng-show="isInGroceryList(ingredients)"
-          ng-click="removeFromGroceryList(ingredients)"
-          class="button button-assertive">Remove from grocery</button>
+      <div class="col">
+        <button class="button button-balanced button-full ion-ios-cart icon-left">Groceries</button>
       </div>
       <div class="col">
         <button
           ng-click="viewRecipe()"
-          class="button button-positive">Cook</button>
+          class="button button-balanced button-full ion-android-restaurant icon-left">Instructions</button>
       </div>
-
     </div>
 
     <div class="list list-inset">
+      <div class="item item-divider item-button-right">
+        <div class="item-content">
+          Ingredients
+        </div>
+      </div>
+      <div class="item item-radio item-button-right">
+        <div class="radio-content">
+          <div class="item-content">
+            Add all to grocery list
+
+            <button
+              ng-hide="isInGroceryList(ingredients)"
+              ng-click="askHowMuch(ingredients)"
+              class="button button-balanced button-small">Add to grocery</button>
+            <button
+              ng-show="isInGroceryList(ingredients)"
+              ng-click="removeFromGroceryList(ingredients)"
+              class="button button-assertive button-small">Remove from grocery</button>
+          </div>
+        </div>
+      </div>
       <div
         ng-repeat="ingredient in ingredients | orderBy:'text'"
         ng-click="toggleGroceryList(ingredient)"
-        class="item item-radio">
+        class="item item-radio item-button-right">
           <div class="radio-content">
             <div class="item-content">
               {{ingredient.text}}
               ({{ingredient.amount}}<span ng-if="ingredient.measurement"> {{ingredient.measurement}}</span><span 
                 ng-show="isInGroceryList(ingredient) && groceryItem(ingredient).serving_ratio != 1">
                 x {{groceryItem(ingredient).serving_ratio}}</span>)
+                <button
+                  ng-class="{ 'ion-checkmark button-disabled': isInGroceryList(ingredient), 'button-positive': !isInGroceryList(ingredient) }"
+                  class="button">
+                  </i>Grocery
+                </button>
             </div>
-            <i
-              ng-class="{ 'checked': isInGroceryList(ingredient) }"
-              class="radio-icon ion-checkmark"></i>
           </div>
       </div>
     </div>
