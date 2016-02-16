@@ -95,6 +95,17 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
+  .state('recipe.ask-ingredients-serving-size', {
+    url: '/ask-how-much-serving size',
+    cache: false,
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-ask-serving-size.html',
+        controller: 'AskHowMuchCtrl'
+      }
+    }
+  })
+
   .state('recipe.ask-to-remove-ingredients', {
     url: '/ask-to-remove',
     cache: false,
@@ -228,7 +239,6 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
         controller: function($state, $http, $ionicHistory, recipe, $scope, $stateParams, api_endpoint) {
           $scope.goBack = function() { $ionicHistory.goBack(); };
 
-          console.log('recipe', recipe);
           var step = recipe.steps[$stateParams.step];
           var ingredient = step.ingredients.join(' ');
 

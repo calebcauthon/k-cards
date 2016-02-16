@@ -10,7 +10,7 @@
 
   <ion-nav-buttons side="right">
     <button
-      ng-click="viewIngredients()"
+      ng-click="askHowMuch()"
       class="button back-button hide buttons button-clear header-item">
       <i class="icon ion-gear-b"></i>
     </button>
@@ -18,7 +18,7 @@
 
   <ion-content>
     <div class="row padding">
-      <h3>This is the recipe for {{recipe.name}}</h3>
+      <h3>This is the recipe for {{recipe.name}} <span ng-show="recipe.serving_ratio != 1">({{recipe.serving_ratio}}x)</span></h3>
     </div>
     <div class="row padding">
       <ul>

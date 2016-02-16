@@ -248,6 +248,10 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services', '
     $state.go('recipe.ingredient-detail', { step: step_index, name: step.ingredients[0] });
   };
 
+  $scope.askHowMuch = function() {
+    $state.go('recipe.ask-ingredients-serving-size');
+  };
+
   $scope.recipe = recipe;
 
   $scope.interpolatedStep = function(step) {
