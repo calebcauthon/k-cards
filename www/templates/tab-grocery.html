@@ -20,7 +20,9 @@
     <div class="row">
       <div class="col text-center">
         <p ng-hide="isInGroceryList(ingredients)">This recipe is <strong>not</strong> in your grocery list</p>
-        <p ng-show="isInGroceryList(ingredients)" class="balanced"><i class="icon ion-checkmark"></i>This recipe is in your grocery list!</p>
+        <p
+          ng-show="isInGroceryList(ingredients)"
+          class="balanced"><i class="icon ion-checkmark"></i>This recipe is in your grocery list!</p>
       </div>
       <div class="col text-center">
         <p>You have made this recipe <strong>2</strong> times before.</p>
@@ -29,7 +31,14 @@
 
     <div class="row">
       <div class="col">
-        <button class="button button-balanced button-full ion-ios-cart icon-left">Groceries</button>
+        <button
+          ng-show="isInGroceryList(ingredients)"
+          ng-click="askToRemove(ingredients)"
+          class="button button-balanced button-full ion-ios-cart icon-left">Groceries</button>
+        <button
+          ng-hide="isInGroceryList(ingredients)"
+          ng-click="askHowMuch(ingredients)"
+          class="button button-balanced button-full ion-ios-cart icon-left">Groceries</button>
       </div>
       <div class="col">
         <button
@@ -42,22 +51,6 @@
       <div class="item item-divider item-button-right">
         <div class="item-content">
           Ingredients
-        </div>
-      </div>
-      <div class="item item-radio item-button-right">
-        <div class="radio-content">
-          <div class="item-content">
-            Add all to grocery list
-
-            <button
-              ng-hide="isInGroceryList(ingredients)"
-              ng-click="askHowMuch(ingredients)"
-              class="button button-balanced button-small">Add to grocery</button>
-            <button
-              ng-show="isInGroceryList(ingredients)"
-              ng-click="removeFromGroceryList(ingredients)"
-              class="button button-assertive button-small">Remove from grocery</button>
-          </div>
         </div>
       </div>
       <div

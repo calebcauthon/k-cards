@@ -2,6 +2,8 @@
   <ion-content class="padding">
     <div class="row">
       <div class="col">
+        <h2>You are adding {{recipe.name}} to your grocery list.</h2>
+        <br />
         Standard <strong>{{recipe.name}}</strong> recipe makes {{recipe.serving_size}} servings
       </div>
     </div>
@@ -14,35 +16,35 @@
 
     <div class="row">
       <div class="col">
-        Servings
-      </div>
-      <div class="col">
-        <i
-          ng-click="decrementServings()"
-          class="ion-ios-minus-outline"></i>
-          <span> {{servings}} </span>
-        <i
-          ng-click="incrementServings()"
-          class="ion-ios-plus-outline"></i>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
         Recipe multiplier
       </div>
       <div class="col">
         <i
           ng-click="decrementMultiplier()"
-          class="ion-ios-minus-outline"></i> 
-          <span> {{multiplier}}x </span>
+          class="ion-ios-minus-outline big"></i>
+          <span style="width: 3em; display: inline-block; text-align: center;"> {{multiplier}}x </span>
         <i
           ng-click="incrementMultiplier()"
-          class="ion-ios-plus-outline"></i>
+          class="ion-ios-plus-outline big"></i>
       </div>
     </div>
 
     <div class="row">
+      <div class="col">
+        Servings
+      </div>
+      <div class="col">
+        <i
+          ng-click="decrementServings()"
+          class="ion-ios-minus-outline big"></i>
+          <span style="width: 3em; display: inline-block; text-align: center;"> {{servings}} </span>
+        <i
+          ng-click="incrementServings()"
+          class="ion-ios-plus-outline big"></i>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 1rem;">
       <button class="button button-assertive" ng-click="cancel()">Cancel</button>
       &nbsp;
       <button class="button button-balanced" ng-click="saveServingSize()">OK</button>

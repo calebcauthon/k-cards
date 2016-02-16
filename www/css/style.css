@@ -20,3 +20,5 @@
 
 .item.grocery-group-header { padding: 0; background: #EDEDED; }
 .item.grocery { padding: 0; }
+
+i.big { font-size: 1.5em; }

@@ -76,6 +76,40 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services', '
   });
 })
 
+.controller('AskToRemoveCtrl', function($scope, $http, $ionicHistory, api_endpoint, recipe, grocery) {
+  $scope.recipe = recipe;
+
+  $scope.cancel = function() {
+    $ionicHistory.goBack();
+  };
+
+  $scope.removeFromGroceryList = function() {
+    var result = grocery.remove(recipe.getIngredients(), recipe);
+    save();
+
+    $ionicHistory.goBack();
+  };
+
+  function save() {
+    if(!grocery.data().name) {
+      $http.post(api_endpoint + '/save-grocery-list', {
+        name: 'My Grocery List',
+        list: grocery.data().list
+      }).then(function(response) {
+        grocery.getLatestsGroceryLists().then(function(lists) {
+          $scope.groceryLists = lists
+          var saved_list = _.find(lists, function(list) {
+            return list.name == 'My Grocery List';
+          });
+          grocery.setList(saved_list.list, saved_list.name, saved_list.id);
+        });
+      });
+    } else {
+      $http.post(api_endpoint + '/update-grocery-list', grocery.data());
+    }
+  };
+})
+
 .controller('AllGroceryCtrl', AllGroceryCtrl)
 
 .controller('ListSettingsCtrl', function($ionicHistory, $scope, $http, api_endpoint, groceryList, grocery) {
@@ -144,6 +178,10 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services', '
 
   $scope.askHowMuch = function(ingredients) {
     $state.go('recipe.ask-ingredients');
+  };
+
+  $scope.askToRemove = function(ingredients) {
+    $state.go('recipe.ask-to-remove-ingredients');
   };
 
   $scope.groceryItem = function(ingredient) {

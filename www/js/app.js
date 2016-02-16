@@ -95,6 +95,17 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
     }
   })
 
+  .state('recipe.ask-to-remove-ingredients', {
+    url: '/ask-to-remove',
+    cache: false,
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-ask-to-remove.html',
+        controller: 'AskToRemoveCtrl'
+      }
+    }
+  })
+
   .state('recipe.ingredients-ask-ingredients', {
     url: '/ingredients-ask-how-much',
     cache: false,
