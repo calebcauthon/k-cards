@@ -199,23 +199,6 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services', '
   $scope.recipes = [];
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-})
-
 .controller('RecipeViewCtrl', function($state, $ionicHistory, $scope, recipe, $ionicNavBarDelegate) {
   $scope.goBack = function() { $ionicHistory.goBack() };
   $scope.viewIngredients = function() {
