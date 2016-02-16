@@ -17,24 +17,28 @@
             <input type="text" ng-model="new_ingredient" placeholder="What ingredient?" />
           </span>
         </div>
-        <div class="col col-25">
+        <div class="col">
           <button
             ng-click="editing=true"
             ng-show="!editing"
-            class="button-right button">Change</button>
+            class="button-right button-calm button">Substitute</button>
           <button
             ng-click="editing=false; updateIngredient(new_ingredient)"
             ng-hide="!editing"
-            class="button-right button">Ok</button>
+            class="button-right button-balanced button">Ok</button>
+          <button
+            ng-click="editing=false;"
+            ng-hide="!editing"
+            class="button-right button-assertive button">Cancel</button>
         </div>
       </div>
     </ion-item>
 
     <ion-item>
       <div class="row">
-        <div class="col">
+        <div class="col col-50">
           <span ng-hide="editing_amount">
-            adding {{amount}} {{measurement}} makes {{serving_size}} servings
+            {{amount}} {{measurement}} per {{serving_size}} servings
           </span>
 
           <div
@@ -56,15 +60,19 @@
           </div>
 
         </div>
-        <div class="col col-25">
+        <div class="col">
           <button
             ng-click="editing_amount=true"
             ng-show="!editing_amount"
-            class="button-right button">Change</button>
+            class="button-right button-calm button">Change Amount</button>
           <button
             ng-click="editing_amount=false; updateIngredientAmount(new_amount, measurement)"
             ng-hide="!editing_amount"
-            class="button-right button">Ok</button>
+            class="button-right button-balanced button">Ok</button>
+          <button
+            ng-click="editing_amount=false;"
+            ng-hide="!editing_amount"
+            class="button-right button-assertive button">Cancel</button>
         </div>
       </div>
     </ion-item>

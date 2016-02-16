@@ -223,11 +223,12 @@ angular.module('starter', ['ionic', 'recipeApp.config', 'starter.controllers', '
   .state('recipe.ingredient-detail', {
     url:'/ingredients/:step/:name',
     views: {
-      'tab-ingredients': {
+      'tab-dash': {
         templateUrl: 'templates/tab-ingredient-detail.html',
-        controller: function($state, $http, recipe, $scope, $stateParams, api_endpoint) {
-          $scope.goBack = function() { $state.go('recipe.ingredients'); };
+        controller: function($state, $http, $ionicHistory, recipe, $scope, $stateParams, api_endpoint) {
+          $scope.goBack = function() { $ionicHistory.goBack(); };
 
+          console.log('recipe', recipe);
           var step = recipe.steps[$stateParams.step];
           var ingredient = step.ingredients.join(' ');
 

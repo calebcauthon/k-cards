@@ -17,12 +17,22 @@
   </ion-nav-buttons>
 
   <ion-content>
+    <div class="row padding">
+      <h3>This is the recipe for {{recipe.name}}</h3>
+    </div>
+    <div class="row padding">
+      <ul>
+        <li><strong>Tap</strong> to check items off the list</li>
+        <li><strong>Swipe left</strong> to make substitutions</li>
+      </ul>
+    </div>
     <ion-list class="steps">
       <div
         class='small'
         ng-repeat-start='step in recipe.steps track by $index'>
           <ion-item ng-if='step.text.length == 0'></ion-item>
           <ion-checkbox
+            on-swipe-left="showIngredientDetail(step)"
             ng-if='step.text.length'
             ng-model="filter.blue">
               <strong>{{step.verb}}</strong> {{interpolatedStep(step)}}
