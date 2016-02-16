@@ -1,0 +1,21 @@
+<ion-view view-title='Remove?'>
+  <ion-content class="padding">
+    <div class="row">
+      <div class="col">
+        <h2>{{recipe.name}} is already in your grocery list.</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Go ahead and remove it?</h3>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 1rem;">
+      <button class="button button-assertive" ng-click="cancel()">Cancel</button>
+      &nbsp;
+      <button class="button button-balanced" ng-click="removeFromGroceryList()">Remove from groceries</button>
+    </div>
+  </ion-content>
+</ion-view>
