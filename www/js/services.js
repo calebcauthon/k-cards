@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.service('grocery', function(usdaNutrition, $q, $http, api_endpoint) {
+.service('grocery', function(usdaNutrition, $q, $http, api_endpoint, Recipe) {
   var list = [];
   var name = null;
   var id = null;
@@ -116,8 +116,9 @@ angular.module('starter.services', [])
         return grocery.ingredient.text
       }).value();
 
-      return _.map(groceries, function(grocery) {
-        return {
+      return $q.all(_.map(groceries, function(grocery) {
+        var grocery_item = {
+          recipe: null,
           grocery_item: grocery,
           food_group: grocery.food_group,
           text: grocery.ingredient.text,
@@ -130,7 +131,20 @@ angular.module('starter.services', [])
                 return this_grocery.ingredient.amount * this_grocery.serving_ratio;
             }).value()
         };
-      }.bind(this));
+
+        var recipePromise = $q.all(_.chain(list).select(function(this_grocery) {
+          return this_grocery.ingredient.text == grocery.ingredient.text;
+        }).map(function(this_grocery) {
+          return $http.get(api_endpoint + '/recipe/' + this_grocery.recipe_id).then(function(response) {
+            return new Recipe(response.data);
+          });
+        }));
+
+        return recipePromise.then(function(recipes) {
+          grocery_item.recipes = recipes;
+          return grocery_item;
+        });
+      }.bind(this)));
     //});
   }
 

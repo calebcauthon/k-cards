@@ -34,8 +34,6 @@ angular.module('starter.controllers', ['recipeApp.config', 'k-cards-services', '
       $scope.addToGroceryList(ingredient);
     });
 
-    console.log(grocery.data());
-
     $ionicHistory.goBack();
   };
 

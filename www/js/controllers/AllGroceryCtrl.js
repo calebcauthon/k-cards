@@ -10,18 +10,21 @@ function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lis
   $scope.list_name = grocery.data().name;
 
   function refreshGroupedGroceryList() {
-    $scope.list = grocery.list();
-    $scope.list_name = grocery.data().name;
+    grocery.list().then(function(full_list) {
+      console.log('full_list', full_list);
+      $scope.list = full_list;
+      $scope.list_name = grocery.data().name;
 
-    $scope.list_food_groups = _.chain($scope.list)
-      .pluck('food_group')
-      .uniq()
-      .select(function(text) {
-        return text && text.length;
-      })
-      .value();
+      $scope.list_food_groups = _.chain($scope.list)
+        .pluck('food_group')
+        .uniq()
+        .select(function(text) {
+          return text && text.length;
+        })
+        .value();
 
-    $scope.show_new = false;
+      $scope.show_new = false;
+    });
   }
 
   $scope.$on('$ionicView.beforeEnter', function() {
