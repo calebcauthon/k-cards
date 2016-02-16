@@ -1,11 +1,15 @@
-function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lists, $scope) {
+function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lists, $scope, Recipe) {
   $scope.groceryLists = lists;
+
+  $scope.showMoreInfo = function() {
+    console.log('successful swipe-right');
+  };
 
   $scope.goBack = function() { $ionicHistory.goBack() };
 
   $scope.list_name = grocery.data().name;
 
-  $scope.$on('$ionicView.beforeEnter', function() {
+  function refreshGroupedGroceryList() {
     $scope.list = grocery.list();
     $scope.list_name = grocery.data().name;
 
@@ -18,6 +22,10 @@ function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lis
       .value();
 
     $scope.show_new = false;
+  }
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+    refreshGroupedGroceryList();
   });
 
   $scope.use = function(groceryListData) {
@@ -32,6 +40,15 @@ function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lis
         return text && text.length;
       })
       .value();
+  };
+
+  $scope.removeFromGroceryList = function(ingredient, recipe_id) {
+    $http.get(api_endpoint + '/recipe/' + recipe_id).then(function(response) {
+      return new Recipe(response.data);
+    }).then(function(recipe) {
+      grocery.remove(ingredient, recipe);
+      refreshGroupedGroceryList();
+    });
   };
 
   $scope.showNew = function() {

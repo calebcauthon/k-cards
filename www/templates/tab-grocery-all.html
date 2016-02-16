@@ -19,6 +19,13 @@
   </ion-nav-buttons>
 
   <ion-content class="padding">
+    <h3>This is your grocery list.</h3>
+    <ul>
+      <li><strong>Tap</strong> to check items on and off the list</li>
+      <li><strong>Swipe right</strong> for more info and substitutions</li>
+      <li><strong>Swipe left</strong> to remove</li>
+    </ul>
+    <br />
     <div class="list">
       <div
         class="item grocery-group-header"
@@ -41,10 +48,30 @@
 
       <div
         ng-repeat-start="grocery in list | filter:{'food_group':group} | orderBy:'text'"
+        ng-init="possible_removal=false"
         ng-show="false">
       </div>
+
+      <div
+        style="padding: 0;"
+        ng-show="possible_removal"
+        class="item">
+        <button
+          ng-click="possible_removal=false"
+          style="width: 25%; margin: 0;"
+          class="button button-calm">Cancel</button>
+        <button
+          ng-click="removeFromGroceryList(grocery.grocery_item.ingredient, grocery.grocery_item.recipe_id); possible_removal=false"
+          style="width: 75%; margin: 0;"
+          class="button button-assertive">Remove {{grocery.text}}</button>
+
+          </div>
+
       <ion-checkbox
+        ng-hide="possible_removal"
         ng-click="save()"
+        on-swipe-right="possible_removal=true"
+        on-swipe-right="showMoreInfo()"
         ng-model="grocery.grocery_item.picked_up">
           <span style="top: 50%; position: absolute; margin-top: -.75em;">
             {{grocery.text}}
