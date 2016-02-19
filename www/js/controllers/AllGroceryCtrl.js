@@ -11,7 +11,6 @@ function AllGroceryCtrl($state, $http, $ionicHistory, api_endpoint, grocery, lis
 
   function refreshGroupedGroceryList() {
     grocery.list().then(function(full_list) {
-      console.log('full_list', full_list);
       $scope.list = full_list;
       $scope.list_name = grocery.data().name;
 
